@@ -141,7 +141,7 @@
         "Admin view: show warning for unknown blocks",
         "Public view: omit unknown blocks entirely"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Block registry maps all core blocks",
         "BlockRenderer renders blocks from JSON array",
