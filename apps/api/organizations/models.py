@@ -350,3 +350,117 @@ class TemplateLibrary(models.Model):
                 # Generate new UUID for cloned block
                 block['id'] = str(uuid.uuid4())
         return blocks
+
+
+class OrgPage(models.Model):
+    """
+    A page belonging to an organization.
+
+    Pages contain blocks_json and can be created from templates
+    or built from scratch. All pages are scoped to an organization
+    for multi-tenant isolation.
+    """
+
+    PAGE_TYPE_CHOICES = [
+        ('home', 'Home Page'),
+        ('about', 'About Page'),
+        ('programs', 'Programs Page'),
+        ('contact', 'Contact Page'),
+        ('custom', 'Custom Page'),
+    ]
+
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+        ('archived', 'Archived'),
+    ]
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Unique identifier for the page"
+    )
+    org = models.ForeignKey(
+        Organization,
+        on_delete=models.CASCADE,
+        related_name='pages',
+        help_text="The organization this page belongs to"
+    )
+    slug = models.SlugField(
+        max_length=100,
+        help_text="URL-friendly identifier (unique per org)"
+    )
+    title = models.CharField(
+        max_length=255,
+        help_text="Page title"
+    )
+    page_type = models.CharField(
+        max_length=20,
+        choices=PAGE_TYPE_CHOICES,
+        default='custom',
+        help_text="The type of page"
+    )
+    blocks_json = models.JSONField(
+        default=list,
+        help_text="Array of block configurations for this page"
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='draft',
+        help_text="Publication status of the page"
+    )
+
+    # Template reference (for tracking where page came from)
+    source_template = models.ForeignKey(
+        TemplateLibrary,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='cloned_pages',
+        help_text="The template this page was created from (if any)"
+    )
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'org_pages'
+        ordering = ['org', 'title']
+        verbose_name = 'organization page'
+        verbose_name_plural = 'organization pages'
+        # Ensure slug is unique within an organization
+        unique_together = [['org', 'slug']]
+
+    def __str__(self):
+        return f"{self.title} ({self.org.name})"
+
+    def save(self, *args, **kwargs):
+        """Auto-generate slug from title if not provided."""
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def create_from_template(cls, org, template, title=None, slug=None):
+        """
+        Create a new page from a template.
+
+        Clones the template's blocks with new IDs.
+        """
+        page_title = title or template.name
+        page_slug = slug or slugify(page_title)
+
+        page = cls(
+            org=org,
+            slug=page_slug,
+            title=page_title,
+            page_type=template.page_type,
+            blocks_json=template.clone_blocks(),
+            source_template=template,
+            status='draft',
+        )
+        page.save()
+        return page

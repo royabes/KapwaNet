@@ -9,7 +9,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary, OrgPage
 from .serializers import (
     OrganizationSerializer,
     OrganizationListSerializer,
@@ -19,6 +19,9 @@ from .serializers import (
     ThemePresetListSerializer,
     TemplateLibrarySerializer,
     TemplateLibraryListSerializer,
+    OrgPageSerializer,
+    OrgPageListSerializer,
+    CreatePageFromTemplateSerializer,
 )
 
 
@@ -190,3 +193,69 @@ class TemplateLibraryViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(category=category)
 
         return queryset
+
+
+class OrgPageViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for organization pages.
+
+    list: List pages for an organization
+    retrieve: Get a single page by ID
+    create: Create a new page
+    update: Update a page
+    destroy: Delete a page
+    from_template: Create a page from a template
+    """
+
+    queryset = OrgPage.objects.all()
+    serializer_class = OrgPageSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get_queryset(self):
+        """
+        Filter pages by organization.
+        For now, only show pages for the organization specified in query params.
+        """
+        queryset = super().get_queryset()
+
+        org_id = self.request.query_params.get('org_id')
+        if org_id:
+            queryset = queryset.filter(org_id=org_id)
+
+        status_filter = self.request.query_params.get('status')
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+
+        return queryset
+
+    def get_serializer_class(self):
+        """Use lightweight serializer for list view."""
+        if self.action == 'list':
+            return OrgPageListSerializer
+        if self.action == 'from_template':
+            return CreatePageFromTemplateSerializer
+        return OrgPageSerializer
+
+    @action(detail=False, methods=['post'], url_path='from-template')
+    def from_template(self, request):
+        """
+        Create a new page from a template.
+        POST /api/pages/from-template/
+
+        Body:
+        {
+            "template_id": "home-starter",
+            "org_id": "uuid-of-organization",
+            "title": "Optional custom title",
+            "slug": "optional-custom-slug"
+        }
+        """
+        serializer = CreatePageFromTemplateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        page = serializer.save()
+
+        # Return the full page data
+        response_serializer = OrgPageSerializer(page)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)

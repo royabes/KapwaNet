@@ -272,7 +272,7 @@
         "Allow customization after clone",
         "Return created page with blocks"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "POST /api/pages/from-template/ creates new page",
         "New page has cloned blocks from template",

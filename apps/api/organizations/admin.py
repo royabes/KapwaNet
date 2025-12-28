@@ -7,7 +7,7 @@ Django admin configuration for Organization models.
 
 from django.contrib import admin
 
-from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary, OrgPage
 
 
 @admin.register(ThemePreset)
@@ -74,6 +74,34 @@ class TemplateLibraryAdmin(admin.ModelAdmin):
             'fields': ('page_type', 'category', 'recommended_preset', 'thumbnail_url')
         }),
         ('Blocks', {
+            'fields': ('blocks_json',),
+            'classes': ('wide',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(OrgPage)
+class OrgPageAdmin(admin.ModelAdmin):
+    """Admin configuration for OrgPage model."""
+
+    list_display = ('title', 'org', 'slug', 'page_type', 'status', 'updated_at')
+    list_filter = ('org', 'page_type', 'status')
+    search_fields = ('title', 'slug', 'org__name')
+    readonly_fields = ('id', 'created_at', 'updated_at')
+    autocomplete_fields = ('org',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('id', 'org', 'title', 'slug', 'status')
+        }),
+        ('Page Configuration', {
+            'fields': ('page_type', 'source_template')
+        }),
+        ('Content', {
             'fields': ('blocks_json',),
             'classes': ('wide',)
         }),

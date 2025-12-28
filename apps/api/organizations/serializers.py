@@ -7,7 +7,7 @@ Serializers for Organization models.
 
 from rest_framework import serializers
 
-from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary, OrgPage
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -192,3 +192,109 @@ class TemplateLibraryListSerializer(serializers.ModelSerializer):
             'thumbnail_url',
             'recommended_preset_id',
         ]
+
+
+class OrgPageSerializer(serializers.ModelSerializer):
+    """Serializer for OrgPage model."""
+
+    source_template_id = serializers.CharField(
+        source='source_template.id',
+        read_only=True,
+        allow_null=True
+    )
+
+    class Meta:
+        model = OrgPage
+        fields = [
+            'id',
+            'org_id',
+            'slug',
+            'title',
+            'page_type',
+            'blocks_json',
+            'status',
+            'source_template_id',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'org_id', 'source_template_id', 'created_at', 'updated_at']
+
+
+class OrgPageListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for listing pages."""
+
+    class Meta:
+        model = OrgPage
+        fields = [
+            'id',
+            'slug',
+            'title',
+            'page_type',
+            'status',
+            'updated_at',
+        ]
+
+
+class CreatePageFromTemplateSerializer(serializers.Serializer):
+    """Serializer for creating a page from a template."""
+
+    template_id = serializers.CharField(
+        required=True,
+        help_text="ID of the template to clone"
+    )
+    org_id = serializers.UUIDField(
+        required=True,
+        help_text="ID of the organization to create the page for"
+    )
+    title = serializers.CharField(
+        required=False,
+        max_length=255,
+        help_text="Optional custom title (defaults to template name)"
+    )
+    slug = serializers.SlugField(
+        required=False,
+        max_length=100,
+        help_text="Optional custom slug (defaults to slugified title)"
+    )
+
+    def validate_template_id(self, value):
+        """Validate that the template exists."""
+        try:
+            TemplateLibrary.objects.get(id=value, is_active=True)
+        except TemplateLibrary.DoesNotExist:
+            raise serializers.ValidationError(f"Template '{value}' not found.")
+        return value
+
+    def validate_org_id(self, value):
+        """Validate that the organization exists."""
+        try:
+            Organization.objects.get(id=value, is_active=True)
+        except Organization.DoesNotExist:
+            raise serializers.ValidationError(f"Organization not found.")
+        return value
+
+    def validate(self, data):
+        """Check for duplicate slug within the organization."""
+        org_id = data.get('org_id')
+        slug = data.get('slug')
+
+        if slug and org_id:
+            if OrgPage.objects.filter(org_id=org_id, slug=slug).exists():
+                raise serializers.ValidationError({
+                    'slug': f"A page with slug '{slug}' already exists for this organization."
+                })
+
+        return data
+
+    def create(self, validated_data):
+        """Create the page from the template."""
+        template = TemplateLibrary.objects.get(id=validated_data['template_id'])
+        org = Organization.objects.get(id=validated_data['org_id'])
+
+        page = OrgPage.create_from_template(
+            org=org,
+            template=template,
+            title=validated_data.get('title'),
+            slug=validated_data.get('slug'),
+        )
+        return page

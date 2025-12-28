@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/organizations/', include('organizations.urls')),
     path('api/theme-presets/', include('organizations.theme_urls')),
     path('api/templates/', include('organizations.template_urls')),
+    path('api/pages/', include('organizations.page_urls')),
 
     # Wagtail pages (catch-all, should be last)
     path('', include(wagtail_urls)),
