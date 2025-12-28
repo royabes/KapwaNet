@@ -12,6 +12,10 @@ import { CardGrid } from './CardGrid'
 import { Steps } from './Steps'
 import { CTABanner } from './CTABanner'
 import { ContactBlock } from './ContactBlock'
+import { AnnouncementBanner } from './AnnouncementBanner'
+import { ImageTextSplit } from './ImageTextSplit'
+import { StatsStrip } from './StatsStrip'
+import { FAQAccordion } from './FAQAccordion'
 
 /**
  * Block component type - takes a block and renders it.
@@ -59,6 +63,26 @@ export const blockRegistry: Record<BlockType, BlockRegistryEntry> = {
   contact_block: {
     component: ContactBlock,
     displayName: 'Contact Block',
+    category: 'content',
+  },
+  announcement_banner: {
+    component: AnnouncementBanner,
+    displayName: 'Announcement Banner',
+    category: 'layout',
+  },
+  image_text_split: {
+    component: ImageTextSplit,
+    displayName: 'Image Text Split',
+    category: 'layout',
+  },
+  stats_strip: {
+    component: StatsStrip,
+    displayName: 'Stats Strip',
+    category: 'layout',
+  },
+  faq_accordion: {
+    component: FAQAccordion,
+    displayName: 'FAQ Accordion',
     category: 'content',
   },
 }

@@ -163,7 +163,7 @@
         "Create StatsStrip block for key metrics display",
         "Create FAQAccordion block with keyboard accessibility"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "AnnouncementBanner supports dismissible option",
         "ImageTextSplit supports left/right image position",

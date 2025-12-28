@@ -107,6 +107,55 @@ export interface ContactBlockData extends BaseBlock {
   mapEmbed?: string
 }
 
+// AnnouncementBanner - dismissible announcement/alert banner
+export interface AnnouncementBannerBlock extends BaseBlock {
+  type: 'announcement_banner'
+  variant?: 'info' | 'warning' | 'success'
+  title?: string
+  text: string
+  cta?: CTAButton
+  dismissible?: boolean
+}
+
+// ImageTextSplit - side-by-side image and text layout
+export interface ImageTextSplitBlock extends BaseBlock {
+  type: 'image_text_split'
+  anchor?: string
+  title: string
+  body: string // HTML content
+  image: {
+    src: string
+    alt: string
+  }
+  imagePosition?: 'left' | 'right'
+}
+
+// StatsStrip stat item
+export interface StatItem {
+  label: string
+  value: string
+}
+
+// StatsStrip - display key metrics/statistics
+export interface StatsStripBlock extends BaseBlock {
+  type: 'stats_strip'
+  items: StatItem[]
+  backgroundColor?: 'primary' | 'secondary' | 'surface' | 'accent'
+}
+
+// FAQ item for FAQAccordion
+export interface FAQItem {
+  q: string // question
+  a: string // answer
+}
+
+// FAQAccordion - expandable FAQ section
+export interface FAQAccordionBlock extends BaseBlock {
+  type: 'faq_accordion'
+  title?: string
+  items: FAQItem[]
+}
+
 // Union type of all block types
 export type Block =
   | HeroBlock
@@ -115,6 +164,10 @@ export type Block =
   | StepsBlock
   | CTABannerBlock
   | ContactBlockData
+  | AnnouncementBannerBlock
+  | ImageTextSplitBlock
+  | StatsStripBlock
+  | FAQAccordionBlock
 
 // Block type string literals
 export type BlockType = Block['type']

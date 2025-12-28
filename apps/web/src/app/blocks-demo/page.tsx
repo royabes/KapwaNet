@@ -13,6 +13,10 @@ import {
   Steps,
   CTABanner,
   ContactBlock,
+  AnnouncementBanner,
+  ImageTextSplit,
+  StatsStrip,
+  FAQAccordion,
 } from '@/components/blocks'
 import type {
   HeroBlock,
@@ -21,6 +25,10 @@ import type {
   StepsBlock,
   CTABannerBlock,
   ContactBlockData,
+  AnnouncementBannerBlock,
+  ImageTextSplitBlock,
+  StatsStripBlock,
+  FAQAccordionBlock,
 } from '@/components/blocks'
 
 // Sample block data
@@ -143,22 +151,158 @@ const contactBlockData: ContactBlockData = {
   ],
 }
 
+// S1-C3 Layout Blocks
+
+const announcementBannerBlock: AnnouncementBannerBlock = {
+  id: 'announcement-1',
+  type: 'announcement_banner',
+  variant: 'info',
+  title: 'Welcome to KapwaNet!',
+  text: 'Our community platform is now open for new members. Join today and connect with neighbors who want to help.',
+  cta: { label: 'Join Now', href: '#' },
+  dismissible: true,
+}
+
+const announcementWarningBlock: AnnouncementBannerBlock = {
+  id: 'announcement-2',
+  type: 'announcement_banner',
+  variant: 'warning',
+  text: 'Weather advisory: Please check conditions before scheduling pickups this week.',
+  dismissible: false,
+}
+
+const announcementSuccessBlock: AnnouncementBannerBlock = {
+  id: 'announcement-3',
+  type: 'announcement_banner',
+  variant: 'success',
+  title: 'Milestone Reached!',
+  text: 'We have helped over 1,000 families this month. Thank you to all our volunteers!',
+  dismissible: true,
+}
+
+const imageTextSplitBlock: ImageTextSplitBlock = {
+  id: 'image-text-1',
+  type: 'image_text_split',
+  title: 'Building Stronger Communities Together',
+  body: `
+    <p>At KapwaNet, we believe in the power of <strong>bayanihan</strong> — the Filipino tradition of communal unity where neighbors help each other without expecting anything in return.</p>
+    <p>Our platform makes it easy to:</p>
+    <ul>
+      <li>Connect with neighbors who need help</li>
+      <li>Share resources you have available</li>
+      <li>Coordinate community events</li>
+    </ul>
+  `,
+  image: {
+    src: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800',
+    alt: 'Community members helping each other',
+  },
+  imagePosition: 'right',
+}
+
+const imageTextSplitLeftBlock: ImageTextSplitBlock = {
+  id: 'image-text-2',
+  type: 'image_text_split',
+  anchor: 'our-mission',
+  title: 'Our Mission',
+  body: `
+    <p>We envision a world where every community has the tools to support its members with <em>dignity</em> and <em>respect</em>.</p>
+    <p>KapwaNet is more than just a platform — it's a movement to revitalize the spirit of mutual aid that has always been at the heart of strong communities.</p>
+  `,
+  image: {
+    src: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800',
+    alt: 'Diverse group of people working together',
+  },
+  imagePosition: 'left',
+}
+
+const statsStripBlock: StatsStripBlock = {
+  id: 'stats-1',
+  type: 'stats_strip',
+  items: [
+    { label: 'Families Helped', value: '2,450+' },
+    { label: 'Active Volunteers', value: '380' },
+    { label: 'Community Orgs', value: '24' },
+    { label: 'Items Shared', value: '8,900+' },
+  ],
+  backgroundColor: 'primary',
+}
+
+const statsStripSurfaceBlock: StatsStripBlock = {
+  id: 'stats-2',
+  type: 'stats_strip',
+  items: [
+    { label: 'Hours Volunteered', value: '12,500' },
+    { label: 'Meals Provided', value: '5,200' },
+    { label: 'Cities Active', value: '15' },
+  ],
+  backgroundColor: 'surface',
+}
+
+const faqAccordionBlock: FAQAccordionBlock = {
+  id: 'faq-1',
+  type: 'faq_accordion',
+  title: 'Frequently Asked Questions',
+  items: [
+    {
+      q: 'How do I join KapwaNet?',
+      a: 'Simply click the "Join Now" button and fill out our registration form. You\'ll need to be verified by a community organization to access all features.',
+    },
+    {
+      q: 'Is KapwaNet free to use?',
+      a: 'Yes! KapwaNet is completely free for both individuals and community organizations. We are funded by grants and donations to ensure equitable access.',
+    },
+    {
+      q: 'How is my privacy protected?',
+      a: 'We take privacy seriously. Your exact address is never shared — only approximate locations for coordination. All data is encrypted and we comply with Alberta PIPA regulations.',
+    },
+    {
+      q: 'Can I volunteer without receiving help?',
+      a: 'Absolutely! Many of our members are here solely to give back. You can choose to only offer help, only receive help, or both.',
+    },
+    {
+      q: 'What kind of help can I request?',
+      a: 'You can request various types of assistance including food, clothing, essential items, transportation, and more. Our moderators review all requests to ensure community safety.',
+    },
+  ],
+}
+
 export default function BlocksDemoPage() {
   return (
     <div>
       <h1 className="sr-only">Blocks Demo</h1>
 
+      {/* S1-C3: Announcement Banners (all 3 variants) */}
+      <AnnouncementBanner block={announcementBannerBlock} />
+      <AnnouncementBanner block={announcementWarningBlock} />
+      <AnnouncementBanner block={announcementSuccessBlock} />
+
       {/* Hero Block */}
       <Hero block={heroBlock} />
+
+      {/* S1-C3: Stats Strip (primary background) */}
+      <StatsStrip block={statsStripBlock} />
 
       {/* Rich Text Section */}
       <RichTextSection block={richTextBlock} />
 
+      {/* S1-C3: Image Text Split (image right) */}
+      <ImageTextSplit block={imageTextSplitBlock} />
+
       {/* Card Grid */}
       <CardGrid block={cardGridBlock} />
 
+      {/* S1-C3: Image Text Split (image left) */}
+      <ImageTextSplit block={imageTextSplitLeftBlock} />
+
       {/* Steps */}
       <Steps block={stepsBlock} />
+
+      {/* S1-C3: Stats Strip (surface background) */}
+      <StatsStrip block={statsStripSurfaceBlock} />
+
+      {/* S1-C3: FAQ Accordion */}
+      <FAQAccordion block={faqAccordionBlock} />
 
       {/* CTA Banner */}
       <CTABanner block={ctaBannerBlock} />

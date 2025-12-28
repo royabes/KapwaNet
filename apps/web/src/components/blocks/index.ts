@@ -15,6 +15,12 @@ export { Steps } from './Steps'
 export { CTABanner } from './CTABanner'
 export { ContactBlock } from './ContactBlock'
 
+// Layout blocks (S1-C3)
+export { AnnouncementBanner } from './AnnouncementBanner'
+export { ImageTextSplit } from './ImageTextSplit'
+export { StatsStrip } from './StatsStrip'
+export { FAQAccordion } from './FAQAccordion'
+
 // Block registry and renderer
 export {
   blockRegistry,
