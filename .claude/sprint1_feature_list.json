@@ -249,7 +249,7 @@
         "Create Programs template with CardGrid + Steps",
         "Seed templates to database"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "TemplateLibrary model exists",
         "At least 3 templates seeded",

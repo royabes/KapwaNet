@@ -252,3 +252,101 @@ class OrgTheme(models.Model):
             '--kn-radius': radius_values.get(radius, '8px'),
             '--kn-spacing-unit': spacing_values.get(spacing, '8px'),
         }
+
+
+class TemplateLibrary(models.Model):
+    """
+    Pre-built page templates for organizations to use.
+
+    Templates provide a starting point for creating pages with
+    pre-configured blocks. Organizations can clone a template
+    to create a new page and then customize it.
+    """
+
+    PAGE_TYPE_CHOICES = [
+        ('home', 'Home Page'),
+        ('about', 'About Page'),
+        ('programs', 'Programs Page'),
+        ('contact', 'Contact Page'),
+        ('custom', 'Custom Page'),
+    ]
+
+    CATEGORY_CHOICES = [
+        ('starter', 'Starter Templates'),
+        ('community', 'Community Organization'),
+        ('nonprofit', 'Nonprofit / Charity'),
+        ('mutual_aid', 'Mutual Aid Group'),
+    ]
+
+    id = models.CharField(
+        max_length=50,
+        primary_key=True,
+        help_text="Unique identifier for the template (e.g., 'home-starter')"
+    )
+    name = models.CharField(
+        max_length=100,
+        help_text="Display name for the template"
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Description of what this template is for"
+    )
+    page_type = models.CharField(
+        max_length=20,
+        choices=PAGE_TYPE_CHOICES,
+        default='custom',
+        help_text="The type of page this template creates"
+    )
+    category = models.CharField(
+        max_length=30,
+        choices=CATEGORY_CHOICES,
+        default='starter',
+        help_text="Category for organizing templates"
+    )
+    blocks_json = models.JSONField(
+        default=list,
+        help_text="Array of block configurations for this template"
+    )
+    thumbnail_url = models.URLField(
+        blank=True,
+        help_text="Preview thumbnail image URL"
+    )
+    recommended_preset = models.ForeignKey(
+        ThemePreset,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='templates',
+        help_text="Recommended theme preset for this template"
+    )
+
+    # Metadata
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Whether this template is available for use"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'template_library'
+        ordering = ['category', 'page_type', 'name']
+        verbose_name = 'page template'
+        verbose_name_plural = 'page templates'
+
+    def __str__(self):
+        return f"{self.name} ({self.get_page_type_display()})"
+
+    def clone_blocks(self):
+        """
+        Return a deep copy of blocks_json for cloning.
+
+        Each cloned block gets a new unique ID.
+        """
+        import copy
+        blocks = copy.deepcopy(self.blocks_json)
+        for block in blocks:
+            if 'id' in block:
+                # Generate new UUID for cloned block
+                block['id'] = str(uuid.uuid4())
+        return blocks

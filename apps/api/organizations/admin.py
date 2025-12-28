@@ -7,7 +7,7 @@ Django admin configuration for Organization models.
 
 from django.contrib import admin
 
-from .models import Organization, OrgTheme, ThemePreset
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary
 
 
 @admin.register(ThemePreset)
@@ -55,3 +55,30 @@ class OrganizationAdmin(admin.ModelAdmin):
     )
 
     ordering = ('name',)
+
+
+@admin.register(TemplateLibrary)
+class TemplateLibraryAdmin(admin.ModelAdmin):
+    """Admin configuration for TemplateLibrary model."""
+
+    list_display = ('id', 'name', 'page_type', 'category', 'is_active', 'created_at')
+    list_filter = ('page_type', 'category', 'is_active')
+    search_fields = ('id', 'name', 'description')
+    readonly_fields = ('created_at', 'updated_at')
+
+    fieldsets = (
+        (None, {
+            'fields': ('id', 'name', 'description', 'is_active')
+        }),
+        ('Template Configuration', {
+            'fields': ('page_type', 'category', 'recommended_preset', 'thumbnail_url')
+        }),
+        ('Blocks', {
+            'fields': ('blocks_json',),
+            'classes': ('wide',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )

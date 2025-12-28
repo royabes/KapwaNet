@@ -7,7 +7,7 @@ Serializers for Organization models.
 
 from rest_framework import serializers
 
-from .models import Organization, OrgTheme, ThemePreset
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -147,3 +147,48 @@ class OrgThemeUpdateSerializer(serializers.Serializer):
                 "Either 'preset_id' or 'theme_json' must be provided."
             )
         return data
+
+
+class TemplateLibrarySerializer(serializers.ModelSerializer):
+    """Serializer for TemplateLibrary model."""
+
+    recommended_preset = ThemePresetListSerializer(read_only=True)
+
+    class Meta:
+        model = TemplateLibrary
+        fields = [
+            'id',
+            'name',
+            'description',
+            'page_type',
+            'category',
+            'blocks_json',
+            'thumbnail_url',
+            'recommended_preset',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+
+
+class TemplateLibraryListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for listing templates."""
+
+    recommended_preset_id = serializers.CharField(
+        source='recommended_preset.id',
+        read_only=True,
+        allow_null=True
+    )
+
+    class Meta:
+        model = TemplateLibrary
+        fields = [
+            'id',
+            'name',
+            'description',
+            'page_type',
+            'category',
+            'thumbnail_url',
+            'recommended_preset_id',
+        ]

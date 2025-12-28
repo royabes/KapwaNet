@@ -9,7 +9,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Organization, OrgTheme, ThemePreset
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary
 from .serializers import (
     OrganizationSerializer,
     OrganizationListSerializer,
@@ -17,6 +17,8 @@ from .serializers import (
     OrgThemeUpdateSerializer,
     ThemePresetSerializer,
     ThemePresetListSerializer,
+    TemplateLibrarySerializer,
+    TemplateLibraryListSerializer,
 )
 
 
@@ -152,3 +154,39 @@ class ThemePresetViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'list':
             return ThemePresetListSerializer
         return ThemePresetSerializer
+
+
+class TemplateLibraryViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet for page templates.
+
+    list: List all active templates (can filter by page_type or category)
+    retrieve: Get a single template by ID with full block data
+    """
+
+    queryset = TemplateLibrary.objects.filter(is_active=True)
+    serializer_class = TemplateLibrarySerializer
+    permission_classes = [permissions.AllowAny]
+    lookup_field = 'pk'
+
+    def get_serializer_class(self):
+        """Use lightweight serializer for list view."""
+        if self.action == 'list':
+            return TemplateLibraryListSerializer
+        return TemplateLibrarySerializer
+
+    def get_queryset(self):
+        """
+        Allow filtering by page_type or category.
+        """
+        queryset = super().get_queryset()
+
+        page_type = self.request.query_params.get('page_type')
+        if page_type:
+            queryset = queryset.filter(page_type=page_type)
+
+        category = self.request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(category=category)
+
+        return queryset
