@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/organizations/', include('organizations.urls')),
+    path('api/theme-presets/', include('organizations.theme_urls')),
 
     # Wagtail pages (catch-all, should be last)
     path('', include(wagtail_urls)),

@@ -45,7 +45,7 @@
         "Add theme serializer",
         "Create API endpoint to get/update org theme"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "OrgTheme model exists with theme_json JSONField",
         "Theme presets seeded in database",

@@ -7,7 +7,28 @@ Django admin configuration for Organization models.
 
 from django.contrib import admin
 
-from .models import Organization
+from .models import Organization, OrgTheme, ThemePreset
+
+
+@admin.register(ThemePreset)
+class ThemePresetAdmin(admin.ModelAdmin):
+    """Admin configuration for ThemePreset model."""
+
+    list_display = ('id', 'name', 'is_dark', 'created_at')
+    list_filter = ('is_dark',)
+    search_fields = ('id', 'name', 'description')
+    readonly_fields = ('created_at',)
+
+
+@admin.register(OrgTheme)
+class OrgThemeAdmin(admin.ModelAdmin):
+    """Admin configuration for OrgTheme model."""
+
+    list_display = ('org', 'preset', 'updated_at')
+    list_filter = ('preset',)
+    search_fields = ('org__name', 'org__slug')
+    readonly_fields = ('updated_at',)
+    autocomplete_fields = ('org',)
 
 
 @admin.register(Organization)
