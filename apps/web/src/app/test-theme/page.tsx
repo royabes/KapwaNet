@@ -3,33 +3,14 @@
 /**
  * Theme test page for KapwaNet.
  *
- * Demonstrates theme switching and CSS variable injection.
+ * Demonstrates theme switching, CSS variable injection, and the admin theme selector.
  */
 
-import { useEffect, useState } from 'react'
 import { useTheme } from '@/contexts'
-import { api } from '@/lib/api'
-import type { ThemePreset } from '@/lib/theme'
+import { ThemePresetSelector } from '@/components/admin'
 
 export default function TestThemePage() {
-  const { theme, currentPreset, isLoading, error, applyPreset, setTheme } = useTheme()
-  const [presets, setPresets] = useState<ThemePreset[]>([])
-  const [loadingPresets, setLoadingPresets] = useState(true)
-
-  // Fetch available presets on mount
-  useEffect(() => {
-    async function fetchPresets() {
-      try {
-        const data = await api.themes.listPresets()
-        setPresets(data)
-      } catch (err) {
-        console.error('Failed to load presets:', err)
-      } finally {
-        setLoadingPresets(false)
-      }
-    }
-    fetchPresets()
-  }, [])
+  const { theme, currentPreset, isLoading, error, setTheme } = useTheme()
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -81,50 +62,9 @@ export default function TestThemePage() {
         </div>
       </section>
 
-      {/* Theme Presets */}
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--kn-text)' }}>
-          Theme Presets
-        </h2>
-        {loadingPresets ? (
-          <p style={{ color: 'var(--kn-muted)' }}>Loading presets...</p>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {presets.map((preset) => (
-              <button
-                key={preset.id}
-                onClick={() => applyPreset(preset.id)}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  currentPreset?.id === preset.id
-                    ? 'border-blue-500 ring-2 ring-blue-200'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-                style={{
-                  backgroundColor: preset.is_dark ? '#1e293b' : '#ffffff',
-                }}
-              >
-                <div className="flex gap-1 mb-2">
-                  {preset.preview_colors.slice(0, 3).map((color, i) => (
-                    <div
-                      key={i}
-                      className="w-6 h-6 rounded"
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                </div>
-                <p
-                  className="text-sm font-medium"
-                  style={{ color: preset.is_dark ? '#f1f5f9' : '#1e293b' }}
-                >
-                  {preset.name}
-                </p>
-                {preset.is_dark && (
-                  <span className="text-xs text-gray-400">Dark</span>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
+      {/* Theme Preset Selector (Admin Component) */}
+      <section className="mb-8 p-6 rounded-lg border" style={{ borderColor: 'var(--kn-muted)' }}>
+        <ThemePresetSelector showPersist={false} />
       </section>
 
       {/* Color Swatches */}

@@ -91,7 +91,7 @@
         "Apply preset and persist to backend",
         "Show confirmation on successful apply"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Preset selector shows available themes",
         "Preset applies instantly on selection",
