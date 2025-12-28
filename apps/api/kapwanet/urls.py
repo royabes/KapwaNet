@@ -38,6 +38,8 @@ urlpatterns = [
     path('api/invites/', include('organizations.invite_urls')),
     path('api/help-posts/', include('help.urls')),
     path('api/help-matches/', include('help.match_urls')),
+    path('api/item-posts/', include('items.urls')),
+    path('api/item-reservations/', include('items.reservation_urls')),
     path('api/', include('messaging.urls')),
 
     # Wagtail pages (catch-all, should be last)

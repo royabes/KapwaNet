@@ -115,7 +115,7 @@
         "Add status: available, reserved, completed, cancelled",
         "Create ItemPost serializer and viewset"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "ItemPost model with all required fields",
         "Food safety fields enforced for food category",
@@ -138,7 +138,7 @@
         "Add confirm-pickup endpoint",
         "Update ItemPost status on reservation"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Reservation links requester to item",
         "Reserve updates item to reserved status",
