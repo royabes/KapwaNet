@@ -68,7 +68,7 @@
         "Apply theme provider at app root",
         "Test: changing colors in theme updates UI"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "ThemeProvider component exists",
         "CSS variables injected: --kn-primary, --kn-secondary, etc.",
