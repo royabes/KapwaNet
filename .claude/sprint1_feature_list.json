@@ -227,7 +227,7 @@
         "Create EventList block for upcoming events (placeholder for Phase 2)",
         "Create ResourceLinks block for downloadable/external links"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "EventList displays event cards with limit option",
         "ResourceLinks renders list of labeled links",

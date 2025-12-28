@@ -24,6 +24,8 @@ import { NeedsWidget } from './NeedsWidget'
 import { SponsorStrip } from './SponsorStrip'
 import { DonateWidget } from './DonateWidget'
 import { VolunteerRoles } from './VolunteerRoles'
+import { EventList } from './EventList'
+import { ResourceLinks } from './ResourceLinks'
 
 /**
  * Block component type - takes a block and renders it.
@@ -132,6 +134,16 @@ export const blockRegistry: Record<BlockType, BlockRegistryEntry> = {
     component: VolunteerRoles,
     displayName: 'Volunteer Roles',
     category: 'interactive',
+  },
+  event_list: {
+    component: EventList,
+    displayName: 'Event List',
+    category: 'utility',
+  },
+  resource_links: {
+    component: ResourceLinks,
+    displayName: 'Resource Links',
+    category: 'utility',
   },
 }
 

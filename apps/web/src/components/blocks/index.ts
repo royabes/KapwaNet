@@ -33,6 +33,10 @@ export { SponsorStrip } from './SponsorStrip'
 export { DonateWidget } from './DonateWidget'
 export { VolunteerRoles } from './VolunteerRoles'
 
+// Utility blocks (S1-C6)
+export { EventList } from './EventList'
+export { ResourceLinks } from './ResourceLinks'
+
 // Block registry and renderer
 export {
   blockRegistry,

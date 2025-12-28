@@ -300,6 +300,42 @@ export interface VolunteerRolesBlock extends BaseBlock {
   cta?: CTAButton
 }
 
+// Event item for EventList
+export interface EventItem {
+  id: string
+  title: string
+  date: string
+  time?: string
+  location?: string
+  description?: string
+  href?: string
+}
+
+// EventList - upcoming events display (Phase 2 placeholder)
+export interface EventListBlock extends BaseBlock {
+  type: 'event_list'
+  title?: string
+  limit?: number
+  cta?: CTAButton
+  // Events can be fetched or provided directly
+  events?: EventItem[]
+}
+
+// Resource link for ResourceLinks
+export interface ResourceLink {
+  label: string
+  href: string
+  description?: string
+  isExternal?: boolean
+}
+
+// ResourceLinks - downloadable/external links
+export interface ResourceLinksBlock extends BaseBlock {
+  type: 'resource_links'
+  title?: string
+  links: ResourceLink[]
+}
+
 // Union type of all block types
 export type Block =
   | HeroBlock
@@ -320,6 +356,8 @@ export type Block =
   | SponsorStripBlock
   | DonateWidgetBlock
   | VolunteerRolesBlock
+  | EventListBlock
+  | ResourceLinksBlock
 
 // Block type string literals
 export type BlockType = Block['type']

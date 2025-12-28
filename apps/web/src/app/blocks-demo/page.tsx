@@ -25,6 +25,8 @@ import {
   SponsorStrip,
   DonateWidget,
   VolunteerRoles,
+  EventList,
+  ResourceLinks,
 } from '@/components/blocks'
 import type {
   HeroBlock,
@@ -45,6 +47,8 @@ import type {
   SponsorStripBlock,
   DonateWidgetBlock,
   VolunteerRolesBlock,
+  EventListBlock,
+  ResourceLinksBlock,
 } from '@/components/blocks'
 
 // Sample block data
@@ -455,6 +459,51 @@ const volunteerRolesBlock: VolunteerRolesBlock = {
   },
 }
 
+// S1-C6 Utility Blocks
+
+const eventListBlock: EventListBlock = {
+  id: 'events-1',
+  type: 'event_list',
+  title: 'Upcoming Events',
+  limit: 4,
+  cta: {
+    label: 'View All Events',
+    href: '/events',
+  },
+}
+
+const resourceLinksBlock: ResourceLinksBlock = {
+  id: 'resources-1',
+  type: 'resource_links',
+  title: 'Resources & Downloads',
+  links: [
+    {
+      label: 'Volunteer Handbook',
+      href: '/downloads/volunteer-handbook.pdf',
+      description: 'Everything you need to know about volunteering with KapwaNet.',
+      isExternal: false,
+    },
+    {
+      label: 'Community Guidelines',
+      href: '/downloads/community-guidelines.pdf',
+      description: 'Our guidelines for safe and respectful community interactions.',
+      isExternal: false,
+    },
+    {
+      label: 'Food Safety Guide',
+      href: 'https://www.albertahealthservices.ca/nutrition/Page2940.aspx',
+      description: 'Alberta Health Services guide for safe food handling.',
+      isExternal: true,
+    },
+    {
+      label: 'Government Assistance Programs',
+      href: 'https://www.alberta.ca/income-support.aspx',
+      description: 'Learn about provincial support programs you may qualify for.',
+      isExternal: true,
+    },
+  ],
+}
+
 export default function BlocksDemoPage() {
   return (
     <div>
@@ -515,6 +564,12 @@ export default function BlocksDemoPage() {
 
       {/* S1-C5: Volunteer Roles */}
       <VolunteerRoles block={volunteerRolesBlock} />
+
+      {/* S1-C6: Event List */}
+      <EventList block={eventListBlock} />
+
+      {/* S1-C6: Resource Links */}
+      <ResourceLinks block={resourceLinksBlock} />
 
       {/* CTA Banner */}
       <CTABanner block={ctaBannerBlock} />
