@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'users',
     'organizations',
     'help',
+    'messaging',
 ]
 
 MIDDLEWARE = [

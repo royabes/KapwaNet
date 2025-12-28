@@ -161,7 +161,7 @@
         "Create thread endpoints: list, get messages",
         "Create message send endpoint"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Thread links to help_match or item_reservation",
         "Messages persist in thread",
