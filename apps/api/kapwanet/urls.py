@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/item-posts/', include('items.urls')),
     path('api/item-reservations/', include('items.reservation_urls')),
     path('api/', include('messaging.urls')),
+    path('api/', include('moderation.urls')),
 
     # Wagtail pages (catch-all, should be last)
     path('', include(wagtail_urls)),

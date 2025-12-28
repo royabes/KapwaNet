@@ -524,6 +524,12 @@ class Membership(models.Model):
         help_text="Internal notes about this membership"
     )
 
+    # Ban flag - prevents user from rejoining via invite
+    is_banned = models.BooleanField(
+        default=False,
+        help_text="Whether the user is banned from the organization"
+    )
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

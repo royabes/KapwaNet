@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'help',
     'messaging',
     'items',
+    'moderation',
 ]
 
 MIDDLEWARE = [

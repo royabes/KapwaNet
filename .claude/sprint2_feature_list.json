@@ -184,7 +184,7 @@
         "Create report submission endpoint",
         "Add report list endpoint (moderators only)"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Report can target user, help_post, item_post, message",
         "Any member can submit report",
@@ -207,7 +207,7 @@
         "Enforce actions (suspend user, remove content)",
         "Log all actions with moderator and notes"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Actions create audit log entry",
         "Suspend action updates membership status",
