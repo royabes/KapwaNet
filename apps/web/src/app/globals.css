@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* KapwaNet Default Theme Variables */
+  --kn-primary: #4F46E5;
+  --kn-secondary: #0EA5E9;
+  --kn-accent: #F59E0B;
+  --kn-bg: #FFFFFF;
+  --kn-surface: #F8FAFC;
+  --kn-text: #1E293B;
+  --kn-muted: #64748B;
+
+  /* Border Radius */
+  --kn-radius-sm: 0.25rem;
+  --kn-radius-md: 0.5rem;
+  --kn-radius-lg: 0.75rem;
+  --kn-radius-xl: 1rem;
+
+  /* Fonts */
+  --kn-font-heading: 'Inter', sans-serif;
+  --kn-font-body: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--kn-font-body);
+  background-color: var(--kn-bg);
+  color: var(--kn-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--kn-font-heading);
+}

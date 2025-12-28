@@ -1,0 +1,21 @@
+# Django Core
+Django>=5.0,<6.0
+djangorestframework>=3.14,<4.0
+django-cors-headers>=4.3,<5.0
+
+# Wagtail CMS
+wagtail>=6.0,<7.0
+
+# Database
+psycopg2-binary>=2.9,<3.0
+dj-database-url>=2.1,<3.0
+
+# Authentication
+djangorestframework-simplejwt>=5.3,<6.0
+
+# Utilities
+python-dotenv>=1.0,<2.0
+Pillow>=10.0,<11.0
+
+# Production server
+gunicorn>=21.0,<23.0

@@ -1,0 +1,16 @@
+# Beads local files (not synced)
+beads.db
+beads.db-shm
+beads.db-wal
+daemon.lock
+daemon.pid
+daemon.log
+bd.sock
+.local_version
+metadata.json
+
+# Keep these files synced
+!config.yaml
+!README.md
+!issues.jsonl
+!.gitignore

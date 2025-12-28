@@ -1,0 +1,287 @@
+{
+  "sprint": 1,
+  "name": "Styling Engine & Templates",
+  "description": "Organizations can style and launch a public site using templates. Key differentiator for KapwaNet.",
+  "success_criteria": [
+    "Changing theme JSON changes site colors/fonts instantly",
+    "Theme presets can be applied and persisted",
+    "All 20 block components render correctly with theme tokens",
+    "Templates can be cloned into new pages",
+    "Unknown block types fail gracefully"
+  ],
+  "features": [
+    {
+      "id": "S1-A1",
+      "epic": "S1-A",
+      "category": "backend",
+      "description": "Organization model",
+      "steps": [
+        "Create organizations Django app",
+        "Define Organization model with UUID, slug, name, region, logo_url",
+        "Create migrations",
+        "Add Organization admin configuration",
+        "Create Organization serializer and viewset",
+        "Add API endpoints for organization CRUD"
+      ],
+      "passes": true,
+      "acceptance_criteria": [
+        "Organization model exists with all fields",
+        "Organization can be created via admin",
+        "API endpoint /api/organizations/ works",
+        "Organization can be retrieved by slug"
+      ],
+      "estimated_complexity": "low",
+      "dependencies": []
+    },
+    {
+      "id": "S1-A2",
+      "epic": "S1-A",
+      "category": "backend",
+      "description": "Theme token schema",
+      "steps": [
+        "Create OrgTheme model linked to Organization",
+        "Define theme_json schema with colors, fonts, radius, spacing",
+        "Create seed data for 4-5 theme presets",
+        "Add theme serializer",
+        "Create API endpoint to get/update org theme"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "OrgTheme model exists with theme_json JSONField",
+        "Theme presets seeded in database",
+        "Org theme retrievable via API",
+        "Theme can be updated via API",
+        "Preset can be applied to org"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-A1"]
+    },
+    {
+      "id": "S1-B1",
+      "epic": "S1-B",
+      "category": "frontend",
+      "description": "Theme provider",
+      "steps": [
+        "Create ThemeProvider React context",
+        "Inject CSS variables from theme_json",
+        "Create useTheme hook for accessing theme values",
+        "Apply theme provider at app root",
+        "Test: changing colors in theme updates UI"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "ThemeProvider component exists",
+        "CSS variables injected: --kn-primary, --kn-secondary, etc.",
+        "Changing theme JSON changes site colors",
+        "Fonts update when theme changes",
+        "Radius values apply to components"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-A2"]
+    },
+    {
+      "id": "S1-B2",
+      "epic": "S1-B",
+      "category": "frontend",
+      "description": "Theme presets switcher (admin-only)",
+      "steps": [
+        "Create theme preset selector component",
+        "Fetch available presets from API",
+        "Preview preset before applying",
+        "Apply preset and persist to backend",
+        "Show confirmation on successful apply"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "Preset selector shows available themes",
+        "Preset applies instantly on selection",
+        "Changes persist to database",
+        "Admin-only access (role check)",
+        "Current preset highlighted"
+      ],
+      "estimated_complexity": "low",
+      "dependencies": ["S1-B1"]
+    },
+    {
+      "id": "S1-C1",
+      "epic": "S1-C",
+      "category": "frontend",
+      "description": "Core block components (6 essential blocks)",
+      "steps": [
+        "Create Hero block component with headline, subheadline, CTAs, background image",
+        "Create RichTextSection block component with sanitized HTML",
+        "Create CardGrid block component (2-4 columns)",
+        "Create Steps block component with numbered steps",
+        "Create CTABanner block component with primary/secondary buttons",
+        "Create ContactBlock block component with org info and social links",
+        "Ensure all blocks use CSS variables for theming"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "Hero renders with headline, CTAs, background image",
+        "RichTextSection renders sanitized HTML",
+        "CardGrid renders cards in configurable columns",
+        "Steps renders numbered step list",
+        "CTABanner renders with primary/secondary buttons",
+        "ContactBlock renders org contact info",
+        "All blocks use --kn-* CSS variables"
+      ],
+      "estimated_complexity": "high",
+      "dependencies": ["S1-B1"]
+    },
+    {
+      "id": "S1-C2",
+      "epic": "S1-C",
+      "category": "frontend",
+      "description": "Block registry and renderer",
+      "steps": [
+        "Create block registry mapping type -> component",
+        "Create BlockRenderer component that uses registry",
+        "Handle unknown block types gracefully",
+        "Admin view: show warning for unknown blocks",
+        "Public view: omit unknown blocks entirely"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "Block registry maps all core blocks",
+        "BlockRenderer renders blocks from JSON array",
+        "Unknown block type shows placeholder in admin",
+        "Unknown block type hidden in public view",
+        "No errors thrown for missing block types"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-C1"]
+    },
+    {
+      "id": "S1-C3",
+      "epic": "S1-C",
+      "category": "frontend",
+      "description": "Additional layout blocks (4 blocks)",
+      "steps": [
+        "Create AnnouncementBanner block with variants (info/warning/success)",
+        "Create ImageTextSplit block with left/right image position",
+        "Create StatsStrip block for key metrics display",
+        "Create FAQAccordion block with keyboard accessibility"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "AnnouncementBanner supports dismissible option",
+        "ImageTextSplit supports left/right image position",
+        "StatsStrip renders label/value pairs",
+        "FAQAccordion is keyboard accessible",
+        "All blocks use --kn-* CSS variables"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-C2"]
+    },
+    {
+      "id": "S1-C4",
+      "epic": "S1-C",
+      "category": "frontend",
+      "description": "Content display blocks (4 blocks)",
+      "steps": [
+        "Create TestimonialQuote block with image and attribution",
+        "Create NewsList block with filtering and pagination",
+        "Create TeamGrid block with member photos and bios",
+        "Create PartnerLogos block for sponsor/partner display"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "TestimonialQuote renders quote with optional image",
+        "NewsList fetches from backend with filters",
+        "TeamGrid shows members with click-to-expand bio",
+        "PartnerLogos renders logo grid with links",
+        "All blocks use --kn-* CSS variables"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-C2"]
+    },
+    {
+      "id": "S1-C5",
+      "epic": "S1-C",
+      "category": "frontend",
+      "description": "Interactive and widget blocks (4 blocks)",
+      "steps": [
+        "Create NeedsWidget block for help/items display",
+        "Create SponsorStrip block with sponsored label",
+        "Create DonateWidget block with suggested amounts",
+        "Create VolunteerRoles block with role listings"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "NeedsWidget fetches and displays community needs",
+        "SponsorStrip renders sponsor logos with optional label",
+        "DonateWidget shows donation links and amounts",
+        "VolunteerRoles lists roles with time commitment",
+        "All blocks use --kn-* CSS variables"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-C2"]
+    },
+    {
+      "id": "S1-C6",
+      "epic": "S1-C",
+      "category": "frontend",
+      "description": "Utility blocks (2 blocks)",
+      "steps": [
+        "Create EventList block for upcoming events (placeholder for Phase 2)",
+        "Create ResourceLinks block for downloadable/external links"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "EventList displays event cards with limit option",
+        "ResourceLinks renders list of labeled links",
+        "All blocks use --kn-* CSS variables"
+      ],
+      "estimated_complexity": "low",
+      "dependencies": ["S1-C2"]
+    },
+    {
+      "id": "S1-D1",
+      "epic": "S1-D",
+      "category": "backend",
+      "description": "Template seed data",
+      "steps": [
+        "Create TemplateLibrary model",
+        "Define template JSON schema (blocks array)",
+        "Create Home template with Hero + CardGrid + CTA",
+        "Create About template with ImageTextSplit + TeamGrid",
+        "Create Programs template with CardGrid + Steps",
+        "Seed templates to database"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "TemplateLibrary model exists",
+        "At least 3 templates seeded",
+        "Templates have page_type, category, blocks_json",
+        "Templates retrievable via API",
+        "Templates include recommended theme preset"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-A2"]
+    },
+    {
+      "id": "S1-D2",
+      "epic": "S1-D",
+      "category": "backend",
+      "description": "Create page from template",
+      "steps": [
+        "Create endpoint to clone template into new page",
+        "Clone blocks array from template",
+        "Associate page with organization",
+        "Allow customization after clone",
+        "Return created page with blocks"
+      ],
+      "passes": false,
+      "acceptance_criteria": [
+        "POST /api/pages/from-template/ creates new page",
+        "New page has cloned blocks from template",
+        "Page associated with correct org",
+        "Blocks are editable after creation",
+        "Original template unchanged"
+      ],
+      "estimated_complexity": "medium",
+      "dependencies": ["S1-D1", "S1-C2"]
+    }
+  ]
+}

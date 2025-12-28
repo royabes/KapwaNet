@@ -1,0 +1,75 @@
+# This is a convenience wrapper that includes the main compose file.
+# Run from project root: docker compose up
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: kapwanet-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kapwanet}
+      POSTGRES_USER: ${POSTGRES_USER:-kapwanet}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kapwanet}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kapwanet} -d ${POSTGRES_DB:-kapwanet}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kapwanet-network
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: kapwanet-api
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
+      DEBUG: ${DEBUG:-True}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,api}
+      DATABASE_URL: postgres://${POSTGRES_USER:-kapwanet}:${POSTGRES_PASSWORD:-kapwanet}@db:5432/${POSTGRES_DB:-kapwanet}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - kapwanet-network
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: kapwanet-web
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - kapwanet-network
+
+volumes:
+  postgres_data:
+    name: kapwanet-postgres-data
+
+networks:
+  kapwanet-network:
+    name: kapwanet-network

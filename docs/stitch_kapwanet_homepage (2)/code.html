@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KapwaNet Homepage</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#73c91d",
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#192111",
+                        "stone-surface": "#e6e4dd", // Custom earthy tone for light mode elements
+                        "stone-dark": "#2a3322",   // Custom earthy tone for dark mode elements
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "1rem", 
+                        "xl": "1.5rem", 
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+                    }
+                },
+            },
+        }
+    </script>
+<style>/* Custom scrollbar hiding for horizontal scroll areas */
+.no-scrollbar::-webkit-scrollbar {
+    display: none
+    }
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none
+    }
+/* Subtle texture overlay */
+.texture-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDZxWntZTSQ27gybWIJ2bVTmuH41VRfPa0FLoXmCH1t3l6LvpSLp8HlQOR-9lxpgOWVAaJpF4dXpnfRZG-vyxeySudKzhFmpfCrCVgxHttEjYDk3ods2O8BZ7AOVa_XbmZVidrRrfx-ph_KQ3DjlBY0_X72JNl0wUjF2WQGrCwWCk6JeA8-jPSifsWNQe48jQySBG7bWBWZymQX0jyq_tsxMDUw9l8qlVNzS_uEMoDyiPdNIZMG5zALiTm9sMPrKU649TqKjHHOic4);
+    opacity: 0.03;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 50
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased selection:bg-primary/30">
+<!-- Texture Overlay for Wabi-Sabi feel -->
+<div class="texture-overlay mix-blend-multiply dark:mix-blend-overlay"></div>
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-40 flex items-center justify-between bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 transition-colors duration-300">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full text-stone-800 dark:text-stone-100 hover:bg-stone-surface dark:hover:bg-stone-dark transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</div>
+<h2 class="text-stone-800 dark:text-stone-100 text-lg font-bold tracking-tight flex-1 text-center">KapwaNet</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-stone-800 dark:text-stone-100 hover:bg-stone-surface dark:hover:bg-stone-dark transition-colors">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex flex-col gap-6 w-full max-w-md mx-auto">
+<!-- Greeting Headline (Welcome Text) -->
+<div class="px-6 pt-2 pb-0">
+<h1 class="text-stone-800 dark:text-stone-100 text-3xl font-bold tracking-tight leading-tight">
+                    Welcome home, <br/>
+<span class="text-stone-500 dark:text-stone-400 font-normal">neighbor.</span>
+</h1>
+</div>
+<!-- Hero Section -->
+<div class="px-4">
+<div class="relative flex min-h-[420px] flex-col gap-6 rounded-2xl overflow-hidden bg-stone-200 dark:bg-stone-800 shadow-sm transition-all duration-500 group">
+<!-- Image Background -->
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Close up of diverse hands holding soil and a small plant together" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCm3XvW6JB2H2qDzd4XuknyscNRTjxqdPbvgj_h8PPjS9ES2sVwpWWR4w2t_m2-gqBHl4mnQkFnNOLVeoWpHZbGRJ7uoL39-RWRe60b2E9X5tECxGTVhOzR4cJWgHnoX7VdQu5Q_CECNMKDYnVF86em4naggFFxcib7ZEc9gmSaSMWaYKJQVcs6CL7EZTuL0gy-6iAa9vKZ3AI3Wv7YlEZMMfW6u-smDWlPsQYiBQGpcYaqitmRRgvqLTsiAeOc7h279AeQg6wmoMg");'>
+</div>
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/70"></div>
+<!-- Content -->
+<div class="relative flex flex-1 flex-col justify-end p-6 md:p-8 text-left z-10">
+<div class="flex flex-col gap-2">
+<span class="inline-flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm w-fit">
+<span class="material-symbols-outlined text-[14px]">volunteer_activism</span>
+                                Mutual Aid
+                            </span>
+<h2 class="text-white text-3xl font-extrabold leading-tight tracking-tight">
+                                Strength in <br/> shared identity
+                            </h2>
+<p class="text-white/90 text-sm font-medium leading-relaxed max-w-[280px]">
+                                Connect with neighbors to share resources, time, and care in your local circle.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons Group (The Heart) -->
+<div class="px-4">
+<div class="flex flex-col gap-3 w-full">
+<!-- Offer Help: Primary Action -->
+<button class="relative flex w-full cursor-pointer items-center justify-between rounded-xl h-16 px-6 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all duration-200 shadow-md shadow-primary/20 group">
+<div class="flex flex-col items-start">
+<span class="text-white text-lg font-bold leading-none">Offer Help</span>
+<span class="text-primary-900/80 text-xs font-medium mt-1">Share resources or time</span>
+</div>
+<div class="size-10 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+</button>
+<div class="grid grid-cols-2 gap-3">
+<!-- Request Help: Secondary Earthy Action -->
+<button class="flex flex-col w-full cursor-pointer items-start justify-center rounded-xl h-24 px-5 bg-stone-surface dark:bg-stone-dark text-stone-800 dark:text-stone-100 hover:brightness-95 dark:hover:brightness-110 active:scale-[0.98] transition-all duration-200 border border-transparent dark:border-white/5">
+<div class="mb-2 size-8 rounded-full bg-white/50 dark:bg-black/20 flex items-center justify-center text-stone-700 dark:text-stone-300">
+<span class="material-symbols-outlined text-[20px]">pan_tool</span>
+</div>
+<span class="text-base font-bold leading-tight">Request Help</span>
+</button>
+<!-- Browse Essentials: Outline Action -->
+<button class="flex flex-col w-full cursor-pointer items-start justify-center rounded-xl h-24 px-5 bg-transparent border-2 border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-white/5 active:scale-[0.98] transition-all duration-200">
+<div class="mb-2 size-8 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-400">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<span class="text-base font-bold leading-tight">Essentials</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Community Pulse (Horizontal Scroll) -->
+<div class="flex flex-col gap-4 py-4">
+<div class="flex items-center justify-between px-6">
+<h2 class="text-stone-800 dark:text-stone-100 text-xl font-bold tracking-tight">Community Pulse</h2>
+<button class="text-primary text-sm font-semibold hover:text-primary/80 transition-colors">View all</button>
+</div>
+<!-- Carousel Container -->
+<div class="flex w-full overflow-x-auto no-scrollbar px-6 pb-4 snap-x snap-mandatory">
+<div class="flex flex-row items-start gap-4">
+<!-- Story Item 1 -->
+<div class="flex flex-col gap-2 w-32 snap-start shrink-0 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-stone-200 dark:bg-stone-800">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A large bowl of uncooked white rice being scooped" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDunFgBrrZdbJreHwgqw6HeRlvf8mPSpPzBnwas7OXgGOx4klm-Tel-Sx7i6H7Q18S5kD5QERoFoqow2qRnEsoVAHWtUdsFkwsb0DZyFBiVsAJPB_-4N_Wsi67QOyLAeHERFwDbvHtNzmDOytwf0OwZRsAVTJMsSsQ6KWNaCbzFP0dNUSitRzYK-PKx59nmB9O-kz8iXWmNI3tXWwGHDlgFGKlmujKf25vx7aJsK7QeQTzqHA76xubSdT9Go0SLpaVrCKoe8rQn6v0");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+<div class="absolute bottom-2 left-2 right-2 flex items-center gap-1">
+<div class="size-5 rounded-full border border-white bg-gray-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDhEMeamzE_jwNGz6U51D7aodtP7rcr1ANBNGjpnaiJR1yjQnHgwypj_lORv-zBO3qvawdgm_PMhFDzVaPOLl5R0f1xo2pjMEUhkwOFO108rtn2kjNZr047qJvDUh9OkASHXUSi6XYz4wJ6HurePIHih15ogcQjFinD8FuB_P48ICM7nZewOPnNUfm8HA3AM23RuNODa6J1gJr0syNJV5bTzL8xBNTLj4hLOf1Xtsya2ivruvKGwVIC86sYiOXo4kB5Sv9AQusdBCk"); background-size: cover;'></div>
+<span class="text-[10px] font-medium text-white truncate">Maria G.</span>
+</div>
+</div>
+<p class="text-stone-800 dark:text-stone-200 text-xs font-semibold leading-tight px-1">Shared 5kg of rice</p>
+</div>
+<!-- Story Item 2 -->
+<div class="flex flex-col gap-2 w-32 snap-start shrink-0 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-stone-200 dark:bg-stone-800">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Group of people cleaning up a local park with green bags" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBEXcXnTsJn1niOPlCPRpxGt2iVv7qeJ1WC6N0kz-5b9xAEKXd9KYhLKJMp3ixz9kdB2ZVbpxO3z0zZb1A7O1gA4r7HvwW6ySQIEV7sd3HY1ScQCqbmAdmAq2NyUs34puZeEPFedqavlzBW57QrBBeEi2U5rS62PckkE3BRNvfzGPSPrpHcjp7aZJdDagq6LAA4KFpQTeJFwhr37Lhv3rCXyyJAJifx3kAvp5CCOj1hGVYMWGplGI7ruR_I_HbR3KtDoPzJyu956k4");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+<div class="absolute bottom-2 left-2 right-2 flex items-center gap-1">
+<div class="size-5 rounded-full border border-white bg-gray-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_RVo_2pYgEvQbld5W4z5YV2Z4WgfGSw2xZMBgy6Ueyu37qXKi1vbl2yWLMI6VWeHWCwqBGewB5d_7psFHplNgla6XZBYOg5mSYBZHpMaf6b8fzQG2jms9R3_tWvLQVs3BjPc7whsCswg_4wrg4UhJ2_ojSWS46pODSgeXGcmkME6DGuqbZ-ayvt5sE_eQVeIsqseS5DlLzkd3nkmP6z0ZawwQ66GXcwRx8x6BU5ooo1Vbw0aNJ4W3OY8cEEF8FZ-zkhPc0mUPZko"); background-size: cover;'></div>
+<span class="text-[10px] font-medium text-white truncate">Block 4</span>
+</div>
+</div>
+<p class="text-stone-800 dark:text-stone-200 text-xs font-semibold leading-tight px-1">Park cleanup</p>
+</div>
+<!-- Story Item 3 -->
+<div class="flex flex-col gap-2 w-32 snap-start shrink-0 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-stone-200 dark:bg-stone-800">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A wooden box filled with various books on a street corner" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf6SVivifyjKuZY_ER0nIEs8rdQACH3vIHp26Zj3_Wie-n-s-dkgW16IgH30A_jc2NGuNGHeKDzcwML4FZsUmchBUdaWy7tZFqlN3y8NkJKn1EEhaQVaBDeRYKlvPHpPszxCGgrsOJYajnBP651iup4ngkfYVI1v_bKqiOZg3gDzeW3xdM7VUnjYEFPmsNh7MFS1fTfJBs0OjFTTpGkRg-V9y9Y8F2wVbA0byKJZrKhE3z3lcJOiAP3xwxKnH8FnKPY6IuBfbxI6w");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+<div class="absolute bottom-2 left-2 right-2 flex items-center gap-1">
+<div class="size-5 rounded-full border border-white bg-gray-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDp1IdP6TKl0bTmMt1wr4AKsnU6gR4KmBldV4pXYMBEAtKryoIldjpqhQSvioJ5iP2Epzuq5NJ5G1nqKneKiM3MIP6PevYAq4A1VPnCjnqVFZs0Ypoi5cN0xchme_Xl7ZG_FYERL_E2-WTmTPoDIugmKdJ_sOy9jxoZZTRsGTaEj-eekmYJK5GgcLxN2K5YhBpQ_rdiLyGGSB08JEE6ku4jED41bVOjmszJx1kGOgoUBN7cWTLlPfAa6U4qeTZcg8aSlh0O8hrU-Pk"); background-size: cover;'></div>
+<span class="text-[10px] font-medium text-white truncate">Sarah L.</span>
+</div>
+</div>
+<p class="text-stone-800 dark:text-stone-200 text-xs font-semibold leading-tight px-1">Book exchange</p>
+</div>
+<!-- Story Item 4 -->
+<div class="flex flex-col gap-2 w-32 snap-start shrink-0 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-stone-200 dark:bg-stone-800">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Fresh vegetables in a basket" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtXiWHRVQ5AbnaMF2xqGbcSWYXoDOVYQod35z7xJDzGjCguLPygelKpkCQWmJ8ZeAf9TXl9feipY69j9LX5j-OwiuuHo5f4A8WK82ikMdWo2UvcCfJlhaMn6tc8bc_k8fvglsgt-nRRPSJWMUIv1j1ZnJoyjlvAbNJkpyqI1F0BEdoI8YV4pMSDAOnC--wP4VlCiV7hvZfpI1UhcVlo7aJUPgrvNSbjAyncS4je4j9qoKdU3eU6LNkBbW2tl3btqecJUIugaF5ekU");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+<div class="absolute bottom-2 left-2 right-2 flex items-center gap-1">
+<div class="size-5 rounded-full border border-white bg-gray-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAl0sxA6DtCFYVmvFNF68HtbwVz-REV481BoUzDxB6SsYaItOhpce2hIkRgO2K21WsfGKQBewfTMbr3uuNITSs1F9PjLBQAgjsMlU9S585oLk1-Ne-wrdQYRNhwok5q3hZEKZ4ZZQNsnu9WC2DRpHEMYsx3uk05MpmB37_Igo63cdBzqCFsWUpOUyxuqEFQuEcGGrC3_3Q2U2u8TZMsllrf1sVwJEpoZfy5hjyPdYxIwT1YBNRGxuLfcJCteZj4ZrHAZlMDWkL6No0"); background-size: cover;'></div>
+<span class="text-[10px] font-medium text-white truncate">Ben T.</span>
+</div>
+</div>
+<p class="text-stone-800 dark:text-stone-200 text-xs font-semibold leading-tight px-1">Fresh Veggies</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Quote/Space for Pause -->
+<div class="px-6 py-4">
+<div class="rounded-xl bg-stone-surface/50 dark:bg-stone-dark/50 p-6 text-center border border-stone-200 dark:border-stone-800/50">
+<span class="material-symbols-outlined text-primary mb-2 text-[28px]">format_quote</span>
+<p class="text-stone-600 dark:text-stone-300 text-sm font-medium italic leading-relaxed">
+                        "The beauty of community is that it accepts you as you are, perfectly imperfect."
+                    </p>
+</div>
+</div>
+<div class="h-10"></div> <!-- Spacer -->
+</main>
+<!-- Floating Bottom Navigation -->
+<nav class="fixed bottom-6 left-4 right-4 z-50 max-w-md mx-auto">
+<div class="h-16 w-full rounded-2xl bg-white/90 dark:bg-[#1f2818]/90 backdrop-blur-xl shadow-lg border border-white/20 dark:border-white/5 flex items-center justify-between px-6">
+<!-- Home (Active) -->
+<button class="flex flex-col items-center justify-center gap-1 text-primary w-12 group">
+<span class="material-symbols-outlined text-[24px] filled group-hover:scale-110 transition-transform">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<!-- Map -->
+<button class="flex flex-col items-center justify-center gap-1 text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 w-12 transition-colors">
+<span class="material-symbols-outlined text-[24px]">map</span>
+<span class="text-[10px] font-medium">Map</span>
+</button>
+<!-- Activity Center Button (Middle) -->
+<div class="-mt-8 size-14 rounded-full bg-stone-800 dark:bg-stone-700 text-white shadow-lg flex items-center justify-center border-4 border-background-light dark:border-background-dark cursor-pointer hover:bg-stone-700 dark:hover:bg-stone-600 transition-colors">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</div>
+<!-- Messages -->
+<button class="flex flex-col items-center justify-center gap-1 text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 w-12 transition-colors">
+<span class="material-symbols-outlined text-[24px]">chat_bubble</span>
+<span class="text-[10px] font-medium">Chat</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center gap-1 text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 w-12 transition-colors">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-[10px] font-medium">Me</span>
+</button>
+</div>
+</nav>
+</div>
+</body></html>
