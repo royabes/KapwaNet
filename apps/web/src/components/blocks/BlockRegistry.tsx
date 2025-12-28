@@ -20,6 +20,10 @@ import { TestimonialQuote } from './TestimonialQuote'
 import { NewsList } from './NewsList'
 import { TeamGrid } from './TeamGrid'
 import { PartnerLogos } from './PartnerLogos'
+import { NeedsWidget } from './NeedsWidget'
+import { SponsorStrip } from './SponsorStrip'
+import { DonateWidget } from './DonateWidget'
+import { VolunteerRoles } from './VolunteerRoles'
 
 /**
  * Block component type - takes a block and renders it.
@@ -108,6 +112,26 @@ export const blockRegistry: Record<BlockType, BlockRegistryEntry> = {
     component: PartnerLogos,
     displayName: 'Partner Logos',
     category: 'content',
+  },
+  needs_widget: {
+    component: NeedsWidget,
+    displayName: 'Needs Widget',
+    category: 'interactive',
+  },
+  sponsor_strip: {
+    component: SponsorStrip,
+    displayName: 'Sponsor Strip',
+    category: 'content',
+  },
+  donate_widget: {
+    component: DonateWidget,
+    displayName: 'Donate Widget',
+    category: 'interactive',
+  },
+  volunteer_roles: {
+    component: VolunteerRoles,
+    displayName: 'Volunteer Roles',
+    category: 'interactive',
   },
 }
 

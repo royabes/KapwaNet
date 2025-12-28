@@ -21,6 +21,10 @@ import {
   NewsList,
   TeamGrid,
   PartnerLogos,
+  NeedsWidget,
+  SponsorStrip,
+  DonateWidget,
+  VolunteerRoles,
 } from '@/components/blocks'
 import type {
   HeroBlock,
@@ -37,6 +41,10 @@ import type {
   NewsListBlock,
   TeamGridBlock,
   PartnerLogosBlock,
+  NeedsWidgetBlock,
+  SponsorStripBlock,
+  DonateWidgetBlock,
+  VolunteerRolesBlock,
 } from '@/components/blocks'
 
 // Sample block data
@@ -372,6 +380,81 @@ const partnerLogosBlock: PartnerLogosBlock = {
   ],
 }
 
+// S1-C5 Interactive and Widget Blocks
+
+const needsWidgetBlock: NeedsWidgetBlock = {
+  id: 'needs-1',
+  type: 'needs_widget',
+  title: 'Community Needs',
+  mode: 'combined',
+  filters: {
+    urgency: 'high_first',
+    limit: 6,
+  },
+}
+
+const sponsorStripBlock: SponsorStripBlock = {
+  id: 'sponsor-1',
+  type: 'sponsor_strip',
+  title: 'Proudly Supported By',
+  sponsoredLabel: true,
+  logos: [
+    {
+      name: 'Local Business 1',
+      src: 'https://via.placeholder.com/160x60?text=Sponsor+1',
+      href: 'https://example.com/sponsor1',
+    },
+    {
+      name: 'Local Business 2',
+      src: 'https://via.placeholder.com/160x60?text=Sponsor+2',
+      href: 'https://example.com/sponsor2',
+    },
+    {
+      name: 'Local Business 3',
+      src: 'https://via.placeholder.com/160x60?text=Sponsor+3',
+      href: 'https://example.com/sponsor3',
+    },
+  ],
+}
+
+const donateWidgetBlock: DonateWidgetBlock = {
+  id: 'donate-1',
+  type: 'donate_widget',
+  title: 'Support Our Mission',
+  body: '<p>Your donation helps us connect community members in need with those who can help. Every contribution makes a difference in building a stronger, more connected community.</p>',
+  suggestedAmounts: ['$10', '$25', '$50', '$100'],
+  donationLinks: [
+    { label: 'Donate Now', href: 'https://donate.example.com' },
+  ],
+}
+
+const volunteerRolesBlock: VolunteerRolesBlock = {
+  id: 'volunteer-1',
+  type: 'volunteer_roles',
+  title: 'Volunteer Opportunities',
+  roles: [
+    {
+      title: 'Delivery Driver',
+      time: '2-4 hours/week',
+      description: 'Help deliver food and essential items to community members who cannot pick up themselves.',
+    },
+    {
+      title: 'Community Ambassador',
+      time: '3-5 hours/week',
+      description: 'Help spread the word about KapwaNet and onboard new community members to the platform.',
+    },
+    {
+      title: 'Tech Support Volunteer',
+      time: '2-3 hours/week',
+      description: 'Assist seniors and others with technology to help them use the KapwaNet platform effectively.',
+    },
+  ],
+  cta: {
+    label: 'Apply to Volunteer',
+    href: '/volunteer/apply',
+  },
+}
+
 export default function BlocksDemoPage() {
   return (
     <div>
@@ -420,6 +503,18 @@ export default function BlocksDemoPage() {
 
       {/* S1-C4: Partner Logos */}
       <PartnerLogos block={partnerLogosBlock} />
+
+      {/* S1-C5: Needs Widget */}
+      <NeedsWidget block={needsWidgetBlock} />
+
+      {/* S1-C5: Sponsor Strip */}
+      <SponsorStrip block={sponsorStripBlock} />
+
+      {/* S1-C5: Donate Widget */}
+      <DonateWidget block={donateWidgetBlock} />
+
+      {/* S1-C5: Volunteer Roles */}
+      <VolunteerRoles block={volunteerRolesBlock} />
 
       {/* CTA Banner */}
       <CTABanner block={ctaBannerBlock} />

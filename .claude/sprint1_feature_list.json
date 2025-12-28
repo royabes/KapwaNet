@@ -207,7 +207,7 @@
         "Create DonateWidget block with suggested amounts",
         "Create VolunteerRoles block with role listings"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "NeedsWidget fetches and displays community needs",
         "SponsorStrip renders sponsor logos with optional label",

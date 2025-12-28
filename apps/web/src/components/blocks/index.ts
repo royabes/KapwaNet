@@ -27,6 +27,12 @@ export { NewsList } from './NewsList'
 export { TeamGrid } from './TeamGrid'
 export { PartnerLogos } from './PartnerLogos'
 
+// Interactive and widget blocks (S1-C5)
+export { NeedsWidget } from './NeedsWidget'
+export { SponsorStrip } from './SponsorStrip'
+export { DonateWidget } from './DonateWidget'
+export { VolunteerRoles } from './VolunteerRoles'
+
 // Block registry and renderer
 export {
   blockRegistry,

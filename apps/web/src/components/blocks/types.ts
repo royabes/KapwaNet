@@ -228,6 +228,78 @@ export interface PartnerLogosBlock extends BaseBlock {
   logos: PartnerLogo[]
 }
 
+// Need item for NeedsWidget
+export interface NeedItem {
+  id: string
+  type: 'help' | 'item'
+  title: string
+  category?: string
+  urgency?: 'low' | 'medium' | 'high'
+  created_at: string
+  location?: string
+}
+
+// NeedsWidget - display community needs
+export interface NeedsWidgetBlock extends BaseBlock {
+  type: 'needs_widget'
+  title?: string
+  mode?: 'combined' | 'help_only' | 'items_only'
+  filters?: {
+    urgency?: 'any' | 'high_first'
+    category?: string
+    limit?: number
+  }
+  emptyStateText?: string
+  // Items can be fetched or provided directly
+  items?: NeedItem[]
+}
+
+// Sponsor logo for SponsorStrip
+export interface SponsorLogo {
+  name: string
+  src: string
+  href?: string
+}
+
+// SponsorStrip - sponsored/partner logos with label
+export interface SponsorStripBlock extends BaseBlock {
+  type: 'sponsor_strip'
+  title?: string
+  logos: SponsorLogo[]
+  sponsoredLabel?: boolean
+}
+
+// Donation link for DonateWidget
+export interface DonationLink {
+  label: string
+  href: string
+}
+
+// DonateWidget - donation call to action
+export interface DonateWidgetBlock extends BaseBlock {
+  type: 'donate_widget'
+  title: string
+  body?: string // HTML content
+  donationLinks?: DonationLink[]
+  suggestedAmounts?: string[]
+}
+
+// Volunteer role for VolunteerRoles
+export interface VolunteerRole {
+  title: string
+  time: string // time commitment
+  description: string
+}
+
+// VolunteerRoles - volunteer opportunities
+export interface VolunteerRolesBlock extends BaseBlock {
+  type: 'volunteer_roles'
+  anchor?: string
+  title: string
+  roles: VolunteerRole[]
+  cta?: CTAButton
+}
+
 // Union type of all block types
 export type Block =
   | HeroBlock
@@ -244,6 +316,10 @@ export type Block =
   | NewsListBlock
   | TeamGridBlock
   | PartnerLogosBlock
+  | NeedsWidgetBlock
+  | SponsorStripBlock
+  | DonateWidgetBlock
+  | VolunteerRolesBlock
 
 // Block type string literals
 export type BlockType = Block['type']
