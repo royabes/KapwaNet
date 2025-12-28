@@ -7,7 +7,7 @@ Serializers for Organization models.
 
 from rest_framework import serializers
 
-from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary, OrgPage
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary, OrgPage, Membership, Invite
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -298,3 +298,249 @@ class CreatePageFromTemplateSerializer(serializers.Serializer):
             slug=validated_data.get('slug'),
         )
         return page
+
+
+class MembershipSerializer(serializers.ModelSerializer):
+    """Full serializer for Membership model."""
+
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    user_display_name = serializers.CharField(source='user.display_name', read_only=True)
+    org_name = serializers.CharField(source='org.name', read_only=True)
+    org_slug = serializers.CharField(source='org.slug', read_only=True)
+    role_display = serializers.CharField(source='get_role_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = [
+            'id',
+            'org',
+            'org_name',
+            'org_slug',
+            'user',
+            'user_email',
+            'user_display_name',
+            'role',
+            'role_display',
+            'status',
+            'status_display',
+            'notes',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class MembershipListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for listing memberships."""
+
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    user_display_name = serializers.CharField(source='user.display_name', read_only=True)
+    role_display = serializers.CharField(source='get_role_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = [
+            'id',
+            'user',
+            'user_email',
+            'user_display_name',
+            'role',
+            'role_display',
+            'status',
+            'status_display',
+            'created_at',
+        ]
+
+
+class MyMembershipSerializer(serializers.ModelSerializer):
+    """Serializer for a user's own memberships (organizations they belong to)."""
+
+    org_id = serializers.UUIDField(source='org.id', read_only=True)
+    org_name = serializers.CharField(source='org.name', read_only=True)
+    org_slug = serializers.CharField(source='org.slug', read_only=True)
+    org_logo_url = serializers.URLField(source='org.logo_url', read_only=True)
+    role_display = serializers.CharField(source='get_role_display', read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = [
+            'id',
+            'org_id',
+            'org_name',
+            'org_slug',
+            'org_logo_url',
+            'role',
+            'role_display',
+            'status',
+            'created_at',
+        ]
+
+
+class UpdateMembershipSerializer(serializers.Serializer):
+    """Serializer for updating a membership (role/status change)."""
+
+    role = serializers.ChoiceField(
+        choices=Membership.ROLE_CHOICES,
+        required=False,
+        help_text="The new role for the member"
+    )
+    status = serializers.ChoiceField(
+        choices=Membership.STATUS_CHOICES,
+        required=False,
+        help_text="The new status for the member"
+    )
+    notes = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text="Notes about the change (e.g., suspension reason)"
+    )
+
+    def validate(self, data):
+        """Ensure at least one field is provided."""
+        if not data.get('role') and not data.get('status') and not data.get('notes'):
+            raise serializers.ValidationError(
+                "At least one of 'role', 'status', or 'notes' must be provided."
+            )
+        return data
+
+
+class InviteSerializer(serializers.ModelSerializer):
+    """Full serializer for Invite model."""
+
+    org_name = serializers.CharField(source='org.name', read_only=True)
+    org_slug = serializers.CharField(source='org.slug', read_only=True)
+    role_display = serializers.CharField(source='get_role_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    created_by_email = serializers.CharField(source='created_by.email', read_only=True)
+    is_valid = serializers.BooleanField(read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Invite
+        fields = [
+            'id',
+            'org',
+            'org_name',
+            'org_slug',
+            'email',
+            'role',
+            'role_display',
+            'token',
+            'status',
+            'status_display',
+            'created_by',
+            'created_by_email',
+            'expires_at',
+            'is_valid',
+            'is_expired',
+            'accepted_by',
+            'accepted_at',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'token', 'status', 'created_by', 'accepted_by', 'accepted_at', 'created_at']
+
+
+class InviteListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for listing invites."""
+
+    role_display = serializers.CharField(source='get_role_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    is_valid = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Invite
+        fields = [
+            'id',
+            'email',
+            'role',
+            'role_display',
+            'status',
+            'status_display',
+            'is_valid',
+            'expires_at',
+            'created_at',
+        ]
+
+
+class CreateInviteSerializer(serializers.Serializer):
+    """Serializer for creating an invite."""
+
+    org_id = serializers.UUIDField(
+        required=True,
+        help_text="ID of the organization to invite to"
+    )
+    email = serializers.EmailField(
+        required=True,
+        help_text="Email address to send the invite to"
+    )
+    role = serializers.ChoiceField(
+        choices=Membership.ROLE_CHOICES,
+        default='member',
+        help_text="Role to assign to the user upon acceptance"
+    )
+    expires_in_days = serializers.IntegerField(
+        default=7,
+        min_value=1,
+        max_value=30,
+        help_text="Number of days until the invite expires"
+    )
+
+    def validate_org_id(self, value):
+        """Validate that the organization exists."""
+        try:
+            Organization.objects.get(id=value, is_active=True)
+        except Organization.DoesNotExist:
+            raise serializers.ValidationError("Organization not found.")
+        return value
+
+
+class AcceptInviteSerializer(serializers.Serializer):
+    """Serializer for accepting an invite."""
+
+    token = serializers.CharField(
+        required=True,
+        help_text="The invite token"
+    )
+
+    def validate_token(self, value):
+        """Validate that the invite exists and is valid."""
+        try:
+            invite = Invite.objects.get(token=value)
+        except Invite.DoesNotExist:
+            raise serializers.ValidationError("Invalid invite token.")
+
+        if not invite.is_valid:
+            if invite.is_expired:
+                raise serializers.ValidationError("This invite has expired.")
+            elif invite.status == 'accepted':
+                raise serializers.ValidationError("This invite has already been used.")
+            elif invite.status == 'cancelled':
+                raise serializers.ValidationError("This invite has been cancelled.")
+            else:
+                raise serializers.ValidationError("This invite is no longer valid.")
+
+        return value
+
+
+class InviteInfoSerializer(serializers.ModelSerializer):
+    """Public serializer for viewing invite details before accepting."""
+
+    org_name = serializers.CharField(source='org.name', read_only=True)
+    org_logo_url = serializers.URLField(source='org.logo_url', read_only=True)
+    role_display = serializers.CharField(source='get_role_display', read_only=True)
+    is_valid = serializers.BooleanField(read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Invite
+        fields = [
+            'org_name',
+            'org_logo_url',
+            'role',
+            'role_display',
+            'is_valid',
+            'is_expired',
+            'expires_at',
+        ]

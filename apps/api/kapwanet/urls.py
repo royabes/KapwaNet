@@ -34,6 +34,9 @@ urlpatterns = [
     path('api/theme-presets/', include('organizations.theme_urls')),
     path('api/templates/', include('organizations.template_urls')),
     path('api/pages/', include('organizations.page_urls')),
+    path('api/memberships/', include('organizations.membership_urls')),
+    path('api/invites/', include('organizations.invite_urls')),
+    path('api/help-posts/', include('help.urls')),
 
     # Wagtail pages (catch-all, should be last)
     path('', include(wagtail_urls)),

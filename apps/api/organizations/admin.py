@@ -7,7 +7,7 @@ Django admin configuration for Organization models.
 
 from django.contrib import admin
 
-from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary, OrgPage
+from .models import Organization, OrgTheme, ThemePreset, TemplateLibrary, OrgPage, Membership, Invite
 
 
 @admin.register(ThemePreset)
@@ -104,6 +104,61 @@ class OrgPageAdmin(admin.ModelAdmin):
         ('Content', {
             'fields': ('blocks_json',),
             'classes': ('wide',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(Membership)
+class MembershipAdmin(admin.ModelAdmin):
+    """Admin configuration for Membership model."""
+
+    list_display = ('user', 'org', 'role', 'status', 'created_at')
+    list_filter = ('org', 'role', 'status')
+    search_fields = ('user__email', 'user__display_name', 'org__name')
+    readonly_fields = ('id', 'created_at', 'updated_at')
+    autocomplete_fields = ('org', 'user')
+
+    fieldsets = (
+        (None, {
+            'fields': ('id', 'org', 'user')
+        }),
+        ('Role & Status', {
+            'fields': ('role', 'status', 'notes')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(Invite)
+class InviteAdmin(admin.ModelAdmin):
+    """Admin configuration for Invite model."""
+
+    list_display = ('email', 'org', 'role', 'status', 'expires_at', 'created_at')
+    list_filter = ('org', 'role', 'status')
+    search_fields = ('email', 'org__name', 'token')
+    readonly_fields = ('id', 'token', 'created_at', 'updated_at', 'accepted_at')
+    autocomplete_fields = ('org', 'created_by', 'accepted_by')
+
+    fieldsets = (
+        (None, {
+            'fields': ('id', 'org', 'email', 'token')
+        }),
+        ('Role & Status', {
+            'fields': ('role', 'status', 'expires_at')
+        }),
+        ('Created By', {
+            'fields': ('created_by',)
+        }),
+        ('Accepted By', {
+            'fields': ('accepted_by', 'accepted_at'),
+            'classes': ('collapse',)
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at'),

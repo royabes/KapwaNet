@@ -11,7 +11,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from users.models import User
-from .models import Organization, OrgTheme, ThemePreset, DEFAULT_THEME
+from .models import Organization, OrgTheme, ThemePreset, Membership, Invite, DEFAULT_THEME
+from .permissions import OrgMembershipPermission, OrgAdminPermission, OrgModeratorPermission
 
 
 class OrganizationModelTest(TestCase):
@@ -349,3 +350,536 @@ class OrgThemeAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['theme_json']['colors']['primary'], '#FF0000')
+
+
+class MembershipModelTest(TestCase):
+    """Test Membership model."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.org = Organization.objects.create(
+            name='Test Org',
+            slug='test-org',
+        )
+        self.user = User.objects.create_user(
+            email='member@test.com',
+            password='testpass123'
+        )
+        self.user2 = User.objects.create_user(
+            email='member2@test.com',
+            password='testpass123'
+        )
+
+    def test_create_membership(self):
+        """Test creating a membership."""
+        membership = Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='member',
+            status='active',
+        )
+        self.assertEqual(str(membership), 'member@test.com - Test Org (Member)')
+        self.assertIsNotNone(membership.id)
+        self.assertTrue(membership.is_active_member)
+
+    def test_role_choices(self):
+        """Test different role choices."""
+        admin = Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='org_admin',
+        )
+        self.assertTrue(admin.is_admin)
+        self.assertTrue(admin.is_moderator)
+
+        moderator = Membership.objects.create(
+            org=self.org,
+            user=self.user2,
+            role='moderator',
+        )
+        self.assertFalse(moderator.is_admin)
+        self.assertTrue(moderator.is_moderator)
+
+    def test_status_choices(self):
+        """Test different status choices."""
+        membership = Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='org_admin',
+            status='active',
+        )
+        self.assertTrue(membership.is_active_member)
+        self.assertTrue(membership.is_admin)
+
+        # Suspend the user
+        membership.status = 'suspended'
+        membership.save()
+        self.assertFalse(membership.is_active_member)
+        self.assertFalse(membership.is_admin)  # Suspended = no admin rights
+
+    def test_unique_constraint(self):
+        """Test that user can only have one membership per org."""
+        Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='member',
+        )
+        # Attempting to create duplicate should fail
+        from django.db import IntegrityError
+        with self.assertRaises(IntegrityError):
+            Membership.objects.create(
+                org=self.org,
+                user=self.user,
+                role='moderator',
+            )
+
+    def test_is_user_member(self):
+        """Test is_user_member class method."""
+        # Before membership
+        self.assertFalse(Membership.is_user_member(self.user, self.org))
+
+        # Create active membership
+        Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='member',
+            status='active',
+        )
+        self.assertTrue(Membership.is_user_member(self.user, self.org))
+
+    def test_is_user_member_suspended(self):
+        """Test is_user_member with suspended status."""
+        membership = Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='member',
+            status='suspended',
+        )
+        # Active check should fail
+        self.assertFalse(Membership.is_user_member(self.user, self.org))
+        # But non-active check should pass
+        self.assertTrue(Membership.is_user_member(self.user, self.org, require_active=False))
+
+    def test_has_role(self):
+        """Test has_role class method."""
+        Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='moderator',
+            status='active',
+        )
+        # Has moderator role
+        self.assertTrue(Membership.has_role(self.user, self.org, 'moderator'))
+        # Does not have admin role
+        self.assertFalse(Membership.has_role(self.user, self.org, 'org_admin'))
+        # Has one of multiple roles
+        self.assertTrue(Membership.has_role(self.user, self.org, ['org_admin', 'moderator']))
+
+    def test_has_role_suspended(self):
+        """Test has_role returns False for suspended users."""
+        Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='org_admin',
+            status='suspended',
+        )
+        self.assertFalse(Membership.has_role(self.user, self.org, 'org_admin'))
+
+    def test_get_user_membership(self):
+        """Test get_user_membership class method."""
+        # Before membership
+        self.assertIsNone(Membership.get_user_membership(self.user, self.org))
+
+        # After membership
+        created = Membership.objects.create(
+            org=self.org,
+            user=self.user,
+            role='member',
+        )
+        found = Membership.get_user_membership(self.user, self.org)
+        self.assertEqual(found, created)
+
+
+class MembershipAPITest(APITestCase):
+    """Test Membership API endpoints."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.org = Organization.objects.create(
+            name='Test Org',
+            slug='test-org',
+        )
+        self.admin_user = User.objects.create_user(
+            email='admin@test.com',
+            password='testpass123',
+            display_name='Admin User',
+        )
+        self.member_user = User.objects.create_user(
+            email='member@test.com',
+            password='testpass123',
+            display_name='Member User',
+        )
+        self.non_member = User.objects.create_user(
+            email='nonmember@test.com',
+            password='testpass123',
+        )
+
+        # Create memberships
+        self.admin_membership = Membership.objects.create(
+            org=self.org,
+            user=self.admin_user,
+            role='org_admin',
+            status='active',
+        )
+        self.member_membership = Membership.objects.create(
+            org=self.org,
+            user=self.member_user,
+            role='member',
+            status='active',
+        )
+
+    def test_my_memberships(self):
+        """Test getting user's own memberships."""
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.get('/api/memberships/my-memberships/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['org_name'], 'Test Org')
+        self.assertEqual(response.data[0]['role'], 'org_admin')
+
+    def test_list_org_members(self):
+        """Test listing members of an organization."""
+        self.client.force_authenticate(user=self.member_user)
+        response = self.client.get(f'/api/memberships/?org_id={self.org.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_list_org_members_not_member(self):
+        """Test that non-members cannot list org members."""
+        self.client.force_authenticate(user=self.non_member)
+        response = self.client.get(f'/api/memberships/?org_id={self.org.id}')
+
+        # Should be forbidden
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_member_role(self):
+        """Test updating a member's role (admin only)."""
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.patch(
+            f'/api/memberships/{self.member_membership.id}/',
+            {'role': 'moderator'},
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['role'], 'moderator')
+
+    def test_suspend_member(self):
+        """Test suspending a member (admin only)."""
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.patch(
+            f'/api/memberships/{self.member_membership.id}/',
+            {'status': 'suspended', 'notes': 'Violation of community guidelines'},
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['status'], 'suspended')
+
+    def test_member_cannot_update_roles(self):
+        """Test that regular members cannot update roles."""
+        self.client.force_authenticate(user=self.member_user)
+        response = self.client.patch(
+            f'/api/memberships/{self.member_membership.id}/',
+            {'role': 'org_admin'},
+            format='json'
+        )
+
+        # Should be forbidden
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_admin_cannot_demote_self(self):
+        """Test that admin cannot demote themselves."""
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.patch(
+            f'/api/memberships/{self.admin_membership.id}/',
+            {'role': 'member'},
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_leave_organization(self):
+        """Test leaving an organization."""
+        self.client.force_authenticate(user=self.member_user)
+        response = self.client.post(f'/api/memberships/{self.member_membership.id}/leave/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.member_membership.refresh_from_db()
+        self.assertEqual(self.member_membership.status, 'left')
+
+    def test_only_admin_cannot_leave(self):
+        """Test that the only admin cannot leave."""
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.post(f'/api/memberships/{self.admin_membership.id}/leave/')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('only admin', response.data['detail'].lower())
+
+
+class InviteModelTest(TestCase):
+    """Test Invite model."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.org = Organization.objects.create(
+            name='Test Org',
+            slug='test-org',
+        )
+        self.admin = User.objects.create_user(
+            email='admin@test.com',
+            password='testpass123'
+        )
+        Membership.objects.create(
+            org=self.org,
+            user=self.admin,
+            role='org_admin',
+            status='active',
+        )
+
+    def test_create_invite(self):
+        """Test creating an invite."""
+        invite = Invite.create_for_email(
+            org=self.org,
+            email='newmember@test.com',
+            role='member',
+            created_by=self.admin,
+        )
+        self.assertIsNotNone(invite.id)
+        self.assertIsNotNone(invite.token)
+        self.assertTrue(len(invite.token) > 20)
+        self.assertEqual(invite.status, 'pending')
+        self.assertTrue(invite.is_valid)
+        self.assertFalse(invite.is_expired)
+
+    def test_accept_invite(self):
+        """Test accepting an invite."""
+        invite = Invite.create_for_email(
+            org=self.org,
+            email='newmember@test.com',
+            role='member',
+            created_by=self.admin,
+        )
+
+        # Create user and accept invite
+        new_user = User.objects.create_user(
+            email='newmember@test.com',
+            password='testpass123'
+        )
+        membership = invite.accept(new_user)
+
+        self.assertEqual(membership.org, self.org)
+        self.assertEqual(membership.user, new_user)
+        self.assertEqual(membership.role, 'member')
+        self.assertEqual(membership.status, 'active')
+
+        # Check invite is marked as accepted
+        invite.refresh_from_db()
+        self.assertEqual(invite.status, 'accepted')
+        self.assertEqual(invite.accepted_by, new_user)
+        self.assertIsNotNone(invite.accepted_at)
+
+    def test_expired_invite(self):
+        """Test that expired invites cannot be accepted."""
+        from django.utils import timezone
+        from datetime import timedelta
+
+        invite = Invite.create_for_email(
+            org=self.org,
+            email='newmember@test.com',
+            role='member',
+            created_by=self.admin,
+        )
+        # Manually set to expired
+        invite.expires_at = timezone.now() - timedelta(days=1)
+        invite.save()
+
+        self.assertTrue(invite.is_expired)
+        self.assertFalse(invite.is_valid)
+
+        # Try to accept
+        new_user = User.objects.create_user(
+            email='newmember@test.com',
+            password='testpass123'
+        )
+        with self.assertRaises(ValueError) as ctx:
+            invite.accept(new_user)
+        self.assertIn('expired', str(ctx.exception).lower())
+
+    def test_cancel_invite(self):
+        """Test cancelling an invite."""
+        invite = Invite.create_for_email(
+            org=self.org,
+            email='newmember@test.com',
+            role='member',
+            created_by=self.admin,
+        )
+        invite.cancel()
+
+        self.assertEqual(invite.status, 'cancelled')
+        self.assertFalse(invite.is_valid)
+
+    def test_duplicate_invite_cancels_previous(self):
+        """Test that creating a new invite cancels the previous one."""
+        invite1 = Invite.create_for_email(
+            org=self.org,
+            email='newmember@test.com',
+            role='member',
+            created_by=self.admin,
+        )
+        invite2 = Invite.create_for_email(
+            org=self.org,
+            email='newmember@test.com',
+            role='moderator',
+            created_by=self.admin,
+        )
+
+        invite1.refresh_from_db()
+        self.assertEqual(invite1.status, 'cancelled')
+        self.assertEqual(invite2.status, 'pending')
+
+
+class InviteAPITest(APITestCase):
+    """Test Invite API endpoints."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.org = Organization.objects.create(
+            name='Test Org',
+            slug='test-org',
+        )
+        self.admin_user = User.objects.create_user(
+            email='admin@test.com',
+            password='testpass123',
+            display_name='Admin User',
+        )
+        self.admin_membership = Membership.objects.create(
+            org=self.org,
+            user=self.admin_user,
+            role='org_admin',
+            status='active',
+        )
+        self.new_user = User.objects.create_user(
+            email='newuser@test.com',
+            password='testpass123',
+        )
+
+    def test_create_invite(self):
+        """Test creating an invite (admin only)."""
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.post('/api/invites/', {
+            'org_id': str(self.org.id),
+            'email': 'invited@test.com',
+            'role': 'member',
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn('token', response.data)
+        self.assertEqual(response.data['email'], 'invited@test.com')
+        self.assertEqual(response.data['role'], 'member')
+
+    def test_non_admin_cannot_create_invite(self):
+        """Test that non-admins cannot create invites."""
+        self.client.force_authenticate(user=self.new_user)
+        response = self.client.post('/api/invites/', {
+            'org_id': str(self.org.id),
+            'email': 'invited@test.com',
+            'role': 'member',
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_invite_info(self):
+        """Test getting invite info by token (public)."""
+        invite = Invite.create_for_email(
+            org=self.org,
+            email='invited@test.com',
+            role='member',
+            created_by=self.admin_user,
+        )
+
+        response = self.client.get(f'/api/invites/info/{invite.token}/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['org_name'], 'Test Org')
+        self.assertEqual(response.data['role'], 'member')
+        self.assertTrue(response.data['is_valid'])
+
+    def test_accept_invite(self):
+        """Test accepting an invite."""
+        invite = Invite.create_for_email(
+            org=self.org,
+            email='newuser@test.com',
+            role='member',
+            created_by=self.admin_user,
+        )
+
+        self.client.force_authenticate(user=self.new_user)
+        response = self.client.post('/api/invites/accept/', {
+            'token': invite.token,
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('membership', response.data)
+        self.assertEqual(response.data['membership']['role'], 'member')
+
+        # Verify membership was created
+        self.assertTrue(Membership.is_user_member(self.new_user, self.org))
+
+    def test_accept_invalid_token(self):
+        """Test accepting with invalid token."""
+        self.client.force_authenticate(user=self.new_user)
+        response = self.client.post('/api/invites/accept/', {
+            'token': 'invalid-token',
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_cancel_invite(self):
+        """Test cancelling an invite (admin only)."""
+        invite = Invite.create_for_email(
+            org=self.org,
+            email='invited@test.com',
+            role='member',
+            created_by=self.admin_user,
+        )
+
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.delete(f'/api/invites/{invite.id}/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        invite.refresh_from_db()
+        self.assertEqual(invite.status, 'cancelled')
+
+    def test_list_invites(self):
+        """Test listing invites for an org (admin only)."""
+        Invite.create_for_email(
+            org=self.org,
+            email='invited1@test.com',
+            role='member',
+            created_by=self.admin_user,
+        )
+        Invite.create_for_email(
+            org=self.org,
+            email='invited2@test.com',
+            role='moderator',
+            created_by=self.admin_user,
+        )
+
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.get(f'/api/invites/?org_id={self.org.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)

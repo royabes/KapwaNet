@@ -23,7 +23,7 @@
         "Create OrgMembershipPermission class",
         "Add membership check to all org-scoped endpoints"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Membership model with user, org, role, status",
         "Unique constraint on (org_id, user_id)",
@@ -46,7 +46,7 @@
         "Send invite email (or return invite link)",
         "User joins org with assigned role on accept"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Invite model with token, role, expires_at",
         "Invite created for specific email and role",
@@ -69,7 +69,7 @@
         "Create HelpPost serializer and viewset",
         "Add endpoints: list, create, update"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "HelpPost model with all required fields",
         "org_id filter on all queries",
