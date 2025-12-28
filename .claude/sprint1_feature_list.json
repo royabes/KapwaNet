@@ -185,7 +185,7 @@
         "Create TeamGrid block with member photos and bios",
         "Create PartnerLogos block for sponsor/partner display"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "TestimonialQuote renders quote with optional image",
         "NewsList fetches from backend with filters",

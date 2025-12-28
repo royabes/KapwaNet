@@ -21,6 +21,12 @@ export { ImageTextSplit } from './ImageTextSplit'
 export { StatsStrip } from './StatsStrip'
 export { FAQAccordion } from './FAQAccordion'
 
+// Content display blocks (S1-C4)
+export { TestimonialQuote } from './TestimonialQuote'
+export { NewsList } from './NewsList'
+export { TeamGrid } from './TeamGrid'
+export { PartnerLogos } from './PartnerLogos'
+
 // Block registry and renderer
 export {
   blockRegistry,

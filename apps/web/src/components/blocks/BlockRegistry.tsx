@@ -16,6 +16,10 @@ import { AnnouncementBanner } from './AnnouncementBanner'
 import { ImageTextSplit } from './ImageTextSplit'
 import { StatsStrip } from './StatsStrip'
 import { FAQAccordion } from './FAQAccordion'
+import { TestimonialQuote } from './TestimonialQuote'
+import { NewsList } from './NewsList'
+import { TeamGrid } from './TeamGrid'
+import { PartnerLogos } from './PartnerLogos'
 
 /**
  * Block component type - takes a block and renders it.
@@ -83,6 +87,26 @@ export const blockRegistry: Record<BlockType, BlockRegistryEntry> = {
   faq_accordion: {
     component: FAQAccordion,
     displayName: 'FAQ Accordion',
+    category: 'content',
+  },
+  testimonial_quote: {
+    component: TestimonialQuote,
+    displayName: 'Testimonial Quote',
+    category: 'content',
+  },
+  news_list: {
+    component: NewsList,
+    displayName: 'News List',
+    category: 'content',
+  },
+  team_grid: {
+    component: TeamGrid,
+    displayName: 'Team Grid',
+    category: 'content',
+  },
+  partner_logos: {
+    component: PartnerLogos,
+    displayName: 'Partner Logos',
     category: 'content',
   },
 }

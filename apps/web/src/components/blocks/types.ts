@@ -156,6 +156,78 @@ export interface FAQAccordionBlock extends BaseBlock {
   items: FAQItem[]
 }
 
+// TestimonialQuote - quote with attribution
+export interface TestimonialQuoteBlock extends BaseBlock {
+  type: 'testimonial_quote'
+  quote: string
+  name?: string
+  role?: string
+  image?: {
+    src: string
+    alt: string
+  }
+}
+
+// News item for NewsList
+export interface NewsItem {
+  id: string
+  title: string
+  excerpt?: string
+  published_at: string
+  slug: string
+  image?: string
+}
+
+// NewsList - display news articles with filtering
+export interface NewsListBlock extends BaseBlock {
+  type: 'news_list'
+  title?: string
+  limit?: number
+  source?: 'public' | 'member_only'
+  showFilters?: boolean
+  filters?: {
+    tags?: boolean
+    categories?: boolean
+  }
+  cta?: CTAButton
+  // Items can be fetched from backend or provided directly
+  items?: NewsItem[]
+}
+
+// Team member for TeamGrid
+export interface TeamMember {
+  name: string
+  role?: string
+  bio?: string
+  photo?: {
+    src: string
+    alt: string
+  }
+}
+
+// TeamGrid - display team members
+export interface TeamGridBlock extends BaseBlock {
+  type: 'team_grid'
+  title?: string
+  members: TeamMember[]
+  showBioOnClick?: boolean
+  columns?: 2 | 3 | 4
+}
+
+// Partner/Sponsor logo
+export interface PartnerLogo {
+  name: string
+  src: string
+  href?: string
+}
+
+// PartnerLogos - display partner/sponsor logos
+export interface PartnerLogosBlock extends BaseBlock {
+  type: 'partner_logos'
+  title?: string
+  logos: PartnerLogo[]
+}
+
 // Union type of all block types
 export type Block =
   | HeroBlock
@@ -168,6 +240,10 @@ export type Block =
   | ImageTextSplitBlock
   | StatsStripBlock
   | FAQAccordionBlock
+  | TestimonialQuoteBlock
+  | NewsListBlock
+  | TeamGridBlock
+  | PartnerLogosBlock
 
 // Block type string literals
 export type BlockType = Block['type']

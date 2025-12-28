@@ -17,6 +17,10 @@ import {
   ImageTextSplit,
   StatsStrip,
   FAQAccordion,
+  TestimonialQuote,
+  NewsList,
+  TeamGrid,
+  PartnerLogos,
 } from '@/components/blocks'
 import type {
   HeroBlock,
@@ -29,6 +33,10 @@ import type {
   ImageTextSplitBlock,
   StatsStripBlock,
   FAQAccordionBlock,
+  TestimonialQuoteBlock,
+  NewsListBlock,
+  TeamGridBlock,
+  PartnerLogosBlock,
 } from '@/components/blocks'
 
 // Sample block data
@@ -267,6 +275,103 @@ const faqAccordionBlock: FAQAccordionBlock = {
   ],
 }
 
+// S1-C4 Content Display Blocks
+
+const testimonialQuoteBlock: TestimonialQuoteBlock = {
+  id: 'testimonial-1',
+  type: 'testimonial_quote',
+  quote: 'KapwaNet helped my family during a difficult time. The community came together to support us with groceries and even helped me find a new job. I am forever grateful for this platform.',
+  name: 'Maria Santos',
+  role: 'Community Member, Calgary',
+  image: {
+    src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200',
+    alt: 'Maria Santos',
+  },
+}
+
+const newsListBlock: NewsListBlock = {
+  id: 'news-1',
+  type: 'news_list',
+  title: 'Latest Community News',
+  limit: 3,
+  source: 'public',
+  cta: { label: 'View All News', href: '/news' },
+}
+
+const teamGridBlock: TeamGridBlock = {
+  id: 'team-1',
+  type: 'team_grid',
+  title: 'Meet Our Team',
+  showBioOnClick: true,
+  columns: 3,
+  members: [
+    {
+      name: 'Dr. Elena Reyes',
+      role: 'Executive Director',
+      bio: 'Elena founded KapwaNet in 2020 with a vision to bring the spirit of bayanihan to digital communities. She holds a PhD in Community Development from the University of Alberta.',
+      photo: {
+        src: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300',
+        alt: 'Dr. Elena Reyes',
+      },
+    },
+    {
+      name: 'James Chen',
+      role: 'Technology Lead',
+      bio: 'James oversees all technical aspects of KapwaNet. With 15 years of software development experience, he ensures our platform is secure, reliable, and accessible to all.',
+      photo: {
+        src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300',
+        alt: 'James Chen',
+      },
+    },
+    {
+      name: 'Sarah Thompson',
+      role: 'Community Manager',
+      bio: 'Sarah coordinates volunteer activities and manages relationships with partner organizations. She has been working in community organizing for over a decade.',
+      photo: {
+        src: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300',
+        alt: 'Sarah Thompson',
+      },
+    },
+    {
+      name: 'Carlos Martinez',
+      role: 'Outreach Coordinator',
+      bio: 'Carlos works with underserved communities to ensure KapwaNet reaches those who need it most. He is fluent in four languages and passionate about accessibility.',
+      photo: {
+        src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300',
+        alt: 'Carlos Martinez',
+      },
+    },
+  ],
+}
+
+const partnerLogosBlock: PartnerLogosBlock = {
+  id: 'partners-1',
+  type: 'partner_logos',
+  title: 'Our Community Partners',
+  logos: [
+    {
+      name: 'United Way',
+      src: 'https://via.placeholder.com/200x80?text=United+Way',
+      href: 'https://unitedway.ca',
+    },
+    {
+      name: 'Community Foundation',
+      src: 'https://via.placeholder.com/200x80?text=Community+Foundation',
+      href: 'https://communityfoundations.ca',
+    },
+    {
+      name: 'Food Bank Alberta',
+      src: 'https://via.placeholder.com/200x80?text=Food+Bank+Alberta',
+      href: 'https://foodbanksalberta.ca',
+    },
+    {
+      name: 'City of Calgary',
+      src: 'https://via.placeholder.com/200x80?text=City+of+Calgary',
+      href: 'https://calgary.ca',
+    },
+  ],
+}
+
 export default function BlocksDemoPage() {
   return (
     <div>
@@ -303,6 +408,18 @@ export default function BlocksDemoPage() {
 
       {/* S1-C3: FAQ Accordion */}
       <FAQAccordion block={faqAccordionBlock} />
+
+      {/* S1-C4: Testimonial Quote */}
+      <TestimonialQuote block={testimonialQuoteBlock} />
+
+      {/* S1-C4: News List */}
+      <NewsList block={newsListBlock} />
+
+      {/* S1-C4: Team Grid */}
+      <TeamGrid block={teamGridBlock} />
+
+      {/* S1-C4: Partner Logos */}
+      <PartnerLogos block={partnerLogosBlock} />
 
       {/* CTA Banner */}
       <CTABanner block={ctaBannerBlock} />
