@@ -1,0 +1,101 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - banner [ref=e7]:
+        - button "menu" [ref=e9] [cursor=pointer]:
+          - generic [ref=e10]: menu
+        - link "Home" [ref=e11] [cursor=pointer]:
+          - /url: /
+          - heading "Home" [level=2] [ref=e12]
+        - link "account_circle" [ref=e14] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e15]: account_circle
+      - main [ref=e16]:
+        - generic [ref=e17]:
+          - heading "Welcome home, neighbor." [level=1] [ref=e19]:
+            - text: Welcome home,
+            - text: neighbor.
+          - generic [ref=e21]:
+            - generic [ref=e27]:
+              - generic [ref=e28]:
+                - generic [ref=e29]: volunteer_activism
+                - text: Mutual Aid
+              - heading "Strength in shared identity" [level=2] [ref=e30]:
+                - text: Strength in
+                - text: shared identity
+              - paragraph [ref=e31]: Connect with neighbors to share resources, time, and care in your local circle.
+            - generic [ref=e33]:
+              - link "Offer Help Share resources or time volunteer_activism" [ref=e34] [cursor=pointer]:
+                - /url: /create?type=offer
+                - generic [ref=e35]:
+                  - generic [ref=e36]: Offer Help
+                  - generic [ref=e37]: Share resources or time
+                - generic [ref=e39]: volunteer_activism
+              - generic [ref=e40]:
+                - link "pan_tool Request Help" [ref=e41] [cursor=pointer]:
+                  - /url: /create?type=request
+                  - generic [ref=e43]: pan_tool
+                  - generic [ref=e44]: Request Help
+                - link "inventory_2 Essentials" [ref=e45] [cursor=pointer]:
+                  - /url: /explore
+                  - generic [ref=e47]: inventory_2
+                  - generic [ref=e48]: Essentials
+            - generic [ref=e49]:
+              - generic [ref=e50]:
+                - heading "Community Pulse" [level=2] [ref=e51]
+                - link "View all" [ref=e52] [cursor=pointer]:
+                  - /url: /explore
+              - generic [ref=e54]:
+                - link "Item Maria G. Shared 5kg of rice" [ref=e55] [cursor=pointer]:
+                  - /url: /offers/1
+                  - generic [ref=e56]:
+                    - generic [ref=e59]: Item
+                    - generic [ref=e62]: Maria G.
+                  - paragraph [ref=e63]: Shared 5kg of rice
+                - link "Help Block 4 Park cleanup" [ref=e64] [cursor=pointer]:
+                  - /url: /needs/2
+                  - generic [ref=e65]:
+                    - generic [ref=e68]: Help
+                    - generic [ref=e71]: Block 4
+                  - paragraph [ref=e72]: Park cleanup
+                - link "Item Sarah L. Book exchange" [ref=e73] [cursor=pointer]:
+                  - /url: /offers/3
+                  - generic [ref=e74]:
+                    - generic [ref=e77]: Item
+                    - generic [ref=e80]: Sarah L.
+                  - paragraph [ref=e81]: Book exchange
+                - link "Item Ben T. Fresh Veggies" [ref=e82] [cursor=pointer]:
+                  - /url: /offers/4
+                  - generic [ref=e83]:
+                    - generic [ref=e86]: Item
+                    - generic [ref=e89]: Ben T.
+                  - paragraph [ref=e90]: Fresh Veggies
+          - generic [ref=e93]:
+            - generic [ref=e94]: format_quote
+            - paragraph [ref=e95]: “The beauty of community is that it accepts you as you are, perfectly imperfect.”
+    - navigation [ref=e97]:
+      - generic [ref=e98]:
+        - link "home Home" [ref=e99] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e100]: home
+          - generic [ref=e101]: Home
+        - link "explore Explore" [ref=e102] [cursor=pointer]:
+          - /url: /explore
+          - generic [ref=e103]: explore
+          - generic [ref=e104]: Explore
+        - link "add" [ref=e105] [cursor=pointer]:
+          - /url: /create
+          - generic [ref=e106]: add
+        - link "chat_bubble Chat" [ref=e107] [cursor=pointer]:
+          - /url: /messages
+          - generic [ref=e108]: chat_bubble
+          - generic [ref=e109]: Chat
+        - link "person Me" [ref=e110] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e111]: person
+          - generic [ref=e112]: Me
+  - alert [ref=e113]
+```

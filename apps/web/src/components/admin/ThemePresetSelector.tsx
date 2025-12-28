@@ -94,7 +94,7 @@ export function ThemePresetSelector({
     setError(null)
 
     try {
-      await api.organizations.updateThemePreset(orgSlugOrId, previewPreset.id, authToken)
+      await api.organizations.updateThemePreset(orgSlugOrId, previewPreset.id)
       setPreviewPreset(null)
       setOriginalTheme(null)
       setSaveSuccess(true)

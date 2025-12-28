@@ -1,0 +1,170 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e7]: diversity_3
+        - generic [ref=e8]:
+          - heading "KapwaNet" [level=1] [ref=e9]
+          - paragraph [ref=e10]: Community Platform
+      - link "add Create Post" [ref=e12] [cursor=pointer]:
+        - /url: /create
+        - generic [ref=e13]: add
+        - text: Create Post
+      - navigation [ref=e14]:
+        - link "home Home" [ref=e15] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e16]: home
+          - generic [ref=e17]: Home
+        - link "explore Explore" [ref=e18] [cursor=pointer]:
+          - /url: /explore
+          - generic [ref=e19]: explore
+          - generic [ref=e20]: Explore
+        - link "volunteer_activism Needs" [ref=e21] [cursor=pointer]:
+          - /url: /needs
+          - generic [ref=e22]: volunteer_activism
+          - generic [ref=e23]: Needs
+        - link "inventory_2 Offers" [ref=e24] [cursor=pointer]:
+          - /url: /offers
+          - generic [ref=e25]: inventory_2
+          - generic [ref=e26]: Offers
+        - link "chat_bubble Messages 3" [ref=e27] [cursor=pointer]:
+          - /url: /messages
+          - generic [ref=e28]: chat_bubble
+          - generic [ref=e29]: Messages
+          - generic [ref=e30]: "3"
+        - link "person Profile" [ref=e31] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e32]: person
+          - generic [ref=e33]: Profile
+      - navigation [ref=e35]:
+        - link "settings Settings" [ref=e36] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e37]: settings
+          - generic [ref=e38]: Settings
+        - link "help Help & Support" [ref=e39] [cursor=pointer]:
+          - /url: /help
+          - generic [ref=e40]: help
+          - generic [ref=e41]: Help & Support
+      - link "person Guest User Sign in to participate" [ref=e43] [cursor=pointer]:
+        - /url: /login
+        - generic [ref=e45]: person
+        - generic [ref=e46]:
+          - paragraph [ref=e47]: Guest User
+          - paragraph [ref=e48]: Sign in to participate
+    - generic [ref=e50]:
+      - banner [ref=e51]:
+        - heading "Home" [level=1] [ref=e52]
+        - generic [ref=e53]:
+          - button "notifications" [ref=e54] [cursor=pointer]:
+            - generic [ref=e55]: notifications
+          - button "account_circle Profile" [ref=e56] [cursor=pointer]:
+            - generic [ref=e57]: account_circle
+            - generic [ref=e58]: Profile
+      - main [ref=e59]:
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - heading "Welcome home, neighbor." [level=1] [ref=e62]
+            - paragraph [ref=e63]: Connect with your community to share resources and support each other.
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - generic [ref=e71]:
+                - generic [ref=e72]:
+                  - generic [ref=e73]: volunteer_activism
+                  - text: Mutual Aid
+                - heading "Strength in shared identity" [level=2] [ref=e74]:
+                  - text: Strength in
+                  - text: shared identity
+                - paragraph [ref=e75]: Connect with neighbors to share resources, time, and care in your local circle.
+              - generic [ref=e77]:
+                - link "Offer Help Share resources or time volunteer_activism" [ref=e78] [cursor=pointer]:
+                  - /url: /create?type=offer
+                  - generic [ref=e79]:
+                    - generic [ref=e80]: Offer Help
+                    - generic [ref=e81]: Share resources or time
+                  - generic [ref=e83]: volunteer_activism
+                - generic [ref=e84]:
+                  - link "pan_tool Request Help" [ref=e85] [cursor=pointer]:
+                    - /url: /create?type=request
+                    - generic [ref=e87]: pan_tool
+                    - generic [ref=e88]: Request Help
+                  - link "inventory_2 Essentials" [ref=e89] [cursor=pointer]:
+                    - /url: /explore
+                    - generic [ref=e91]: inventory_2
+                    - generic [ref=e92]: Essentials
+              - generic [ref=e93]:
+                - generic [ref=e94]:
+                  - heading "Community Pulse" [level=2] [ref=e95]
+                  - link "View all" [ref=e96] [cursor=pointer]:
+                    - /url: /explore
+                - generic [ref=e98]:
+                  - link "Item Maria G. Shared 5kg of rice" [ref=e99] [cursor=pointer]:
+                    - /url: /offers/1
+                    - generic [ref=e100]:
+                      - generic [ref=e103]: Item
+                      - generic [ref=e106]: Maria G.
+                    - paragraph [ref=e107]: Shared 5kg of rice
+                  - link "Help Block 4 Park cleanup" [ref=e108] [cursor=pointer]:
+                    - /url: /needs/2
+                    - generic [ref=e109]:
+                      - generic [ref=e112]: Help
+                      - generic [ref=e115]: Block 4
+                    - paragraph [ref=e116]: Park cleanup
+                  - link "Item Sarah L. Book exchange" [ref=e117] [cursor=pointer]:
+                    - /url: /offers/3
+                    - generic [ref=e118]:
+                      - generic [ref=e121]: Item
+                      - generic [ref=e124]: Sarah L.
+                    - paragraph [ref=e125]: Book exchange
+                  - link "Item Ben T. Fresh Veggies" [ref=e126] [cursor=pointer]:
+                    - /url: /offers/4
+                    - generic [ref=e127]:
+                      - generic [ref=e130]: Item
+                      - generic [ref=e133]: Ben T.
+                    - paragraph [ref=e134]: Fresh Veggies
+            - generic [ref=e135]:
+              - generic [ref=e137]:
+                - generic [ref=e138]: format_quote
+                - paragraph [ref=e139]: “The beauty of community is that it accepts you as you are, perfectly imperfect.”
+              - generic [ref=e140]:
+                - generic [ref=e141]:
+                  - heading "Recent Activity" [level=3] [ref=e142]
+                  - link "View all" [ref=e143] [cursor=pointer]:
+                    - /url: /activity
+                - generic [ref=e144]:
+                  - generic [ref=e145]:
+                    - generic [ref=e147]: volunteer_activism
+                    - generic [ref=e148]:
+                      - paragraph [ref=e149]: Maria G. offered to help with groceries
+                      - paragraph [ref=e150]: 2 min ago
+                  - generic [ref=e151]:
+                    - generic [ref=e153]: inventory_2
+                    - generic [ref=e154]:
+                      - paragraph [ref=e155]: Ben T. shared fresh vegetables
+                      - paragraph [ref=e156]: 15 min ago
+                  - generic [ref=e157]:
+                    - generic [ref=e159]: pan_tool
+                    - generic [ref=e160]:
+                      - paragraph [ref=e161]: Sarah L. needs help with transportation
+                      - paragraph [ref=e162]: 1 hour ago
+                  - generic [ref=e163]:
+                    - generic [ref=e165]: celebration
+                    - generic [ref=e166]:
+                      - paragraph [ref=e167]: Block 4 Community organized park cleanup
+                      - paragraph [ref=e168]: 2 hours ago
+              - generic [ref=e169]:
+                - heading "Community Stats" [level=3] [ref=e170]
+                - generic [ref=e171]:
+                  - generic [ref=e172]:
+                    - generic [ref=e173]: Active Requests
+                    - generic [ref=e174]: "24"
+                  - generic [ref=e175]:
+                    - generic [ref=e176]: Items Available
+                    - generic [ref=e177]: "58"
+                  - generic [ref=e178]:
+                    - generic [ref=e179]: Helped This Week
+                    - generic [ref=e180]: "142"
+  - alert [ref=e181]
+```

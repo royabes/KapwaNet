@@ -77,18 +77,12 @@ media/
 # Harness
 harness/venv/
 
-# Beads local files
-.beads/beads.db
-.beads/beads.db-shm
-.beads/beads.db-wal
-.beads/daemon.lock
-.beads/daemon.pid
-.beads/daemon.log
-.beads/bd.sock
-.beads/.local_version
-.beads/metadata.json
+# Development tools (exclude from distribution)
+.beads/
+.claude/
+harness/
+AGENTS.md
+CLAUDE.md
 
-# Claude local settings
-.claude/settings.local.json
-.claude/*_sdk_output.log
-.claude/*_history.json
+# Documentation drafts (keep docs/ for user docs)
+doc/

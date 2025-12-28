@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KapwaNet Item Sharing Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#73c91d",
+                        "primary-dark": "#5da813",
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#192111",
+                        "stone-50": "#fafaf9",
+                        "stone-100": "#f5f5f4",
+                        "stone-200": "#e7e5e4",
+                        "stone-800": "#292524",
+                        "stone-900": "#1c1917",
+                        "earth-brown": "#8c7b70",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px" },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnPjxmaWx0ZXIgaWQ9J24nPjxmZVR1cmJ1bGVuY2UgdHlwZT0nZnJhY3RhbE5vaXNlJyBiYXNlRnJlcXVlbmN5PScwLjYnIHN0aXRjaFRpbGVzPSdzdGl0Y2gnLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSd0cmFuc3BhcmVudCcvPjxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbGw9J2JsYWNrJyBmaWx0ZXI9J3VybCgjbiknIG9wYWNpdHk9JzAuMDUnLz48L3N2Zz4=')",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for hidden feel */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Wabi-sabi gentle shadow */
+        .soft-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+        .dark .soft-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-stone-800 dark:text-stone-100 transition-colors duration-200">
+<!-- Main Container -->
+<div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto overflow-x-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Texture Overlay -->
+<div class="absolute inset-0 pointer-events-none bg-noise opacity-40 z-0 mix-blend-overlay"></div>
+<!-- Content Wrapper (z-10 to sit above texture) -->
+<div class="relative z-10 flex flex-col h-full pb-24">
+<!-- Top Header -->
+<header class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md px-4 pt-6 pb-2 border-b border-stone-200/50 dark:border-stone-800/50">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-primary/20" data-alt="User profile picture of a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZMs0U37ZkCwE_-CDOg742rGMPeMua4yX6bqC6DZJWxQzSumT_nJLdTJiDubxZOWWSipm5-JjUG9eGihxsUATNpAUeOvEQe-CAVY7OBEuhG8GuRSe_5CG_vNAWZrUBi_5Skr8u9AsmP8VS6m7OhaXdMEID1yS-AltbgdUumfNybqh0XTuwITgqP7uZokl1YuRqQMtwuH4_opVLFklqcxKUAUqtBhWGENEbfCU3_F8mh4fyOF6b5AoE1wF1jQblLL_av8TXCPbZtYg");'></div>
+<div class="absolute bottom-0 right-0 size-3 bg-primary rounded-full border-2 border-background-light dark:border-background-dark"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-earth-brown dark:text-stone-400 font-medium">Sharing in</span>
+<div class="flex items-center gap-1 text-stone-900 dark:text-white font-bold leading-tight">
+<span>Mission District</span>
+<span class="material-symbols-outlined text-primary text-[18px]">expand_more</span>
+</div>
+</div>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white hover:bg-stone-200 dark:hover:bg-stone-700 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<!-- Search Bar -->
+<div class="mt-4">
+<div class="relative flex items-center w-full h-12 rounded-2xl bg-stone-100 dark:bg-stone-800/50 group focus-within:bg-white dark:focus-within:bg-stone-800 focus-within:ring-2 focus-within:ring-primary/50 transition-all duration-300 soft-shadow">
+<div class="flex items-center justify-center pl-4 pr-2 text-earth-brown dark:text-stone-400">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full h-full bg-transparent border-none focus:ring-0 text-stone-900 dark:text-white placeholder:text-stone-400 text-base font-normal rounded-2xl" placeholder="Search for plants, food, tools..." type="text"/>
+<div class="pr-2">
+<button class="p-2 rounded-xl text-primary hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 px-4 pt-4 flex flex-col gap-6">
+<!-- Toggle Segment -->
+<div class="flex p-1 bg-stone-200/50 dark:bg-stone-800/50 rounded-2xl self-center w-full max-w-[320px]">
+<button class="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 bg-white dark:bg-stone-700 text-primary dark:text-primary shadow-sm">
+                        Offers (Give)
+                    </button>
+<button class="flex-1 py-2.5 px-4 rounded-xl text-sm font-medium text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors">
+                        Requests (Ask)
+                    </button>
+</div>
+<!-- Chips / Categories -->
+<div class="w-full overflow-x-auto hide-scrollbar -mx-4 px-4 pb-2">
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white font-medium text-sm whitespace-nowrap shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+                            All
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">potted_plant</span>
+                            Plants
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">skillet</span>
+                            Food
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">checkroom</span>
+                            Clothing
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 font-medium text-sm whitespace-nowrap hover:border-primary/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">handyman</span>
+                            Tools
+                        </button>
+</div>
+</div>
+<!-- Masonry Grid -->
+<div class="columns-2 gap-4 space-y-4">
+<!-- Card 1 -->
+<div class="break-inside-avoid relative group cursor-pointer">
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-stone-800 soft-shadow transition-transform duration-300 hover:-translate-y-1">
+<div class="aspect-[4/5] w-full relative">
+<img alt="Fresh sourdough bread on a wooden table" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfozs9O4vJprKlZ9gmgR-6dZ94ZmMExYBTHuLp8OxJJ_QqgJ05ZJg4-0N5IRjJCoTckkqgOO-6Gcd9jKdFdlnP6p7_8WnJdSYk7DqiX0l0sd4AIoNLqUsDFZj29jzmnQjSwZb7oqE1ClH5-DAx9ovOhhNLp_fdFSSdIukjy0Jpz20e5fN5cuozPkDDLurIzwceyMedBPwxrkdntSE4bcieB9mfIlBFS4RR5mK7jz93uAmz227fTIVIyvd_0D-0LnAPHxyvDzVTzKg"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-xs font-semibold text-primary uppercase tracking-wide">
+                                    Available
+                                </div>
+</div>
+<div class="p-3">
+<h3 class="text-stone-900 dark:text-white font-bold text-sm leading-snug mb-1">Sourdough Starter</h3>
+<div class="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 mb-3">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span>0.5 mi • Pickup today</span>
+</div>
+<div class="flex items-center justify-between border-t border-stone-100 dark:border-stone-700 pt-2">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Avatar of Maria" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADUASC-2QB_oQNgqwPPGAKOewCHUD8LtPTGcm0A-4tIvjWgg1DQdCGHWcUAU8C8eFvvWDDqntV9CqPPspVpvz79LmoPEo1GtiHPHFq8OhBUzwJdf4Ze0Liqe2T7u2OiCcCIxyFN-d_i5Q-7nnSAHiKMDhqdQOeSPU-NKa7iw2Wl_mmJrjcX6vHDfhrzef9RWQHWTOPTxARkJLA9PtG5CKC4P0s5s5AmgVulRT90-KQrXgZ06kocRMoxQyxSXThP6WCO__zHMlnxs4");'></div>
+<span class="text-xs font-medium text-stone-700 dark:text-stone-300">Maria</span>
+</div>
+<span class="text-[10px] text-stone-400">2h ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="break-inside-avoid relative group cursor-pointer">
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-stone-800 soft-shadow transition-transform duration-300 hover:-translate-y-1">
+<div class="aspect-[3/4] w-full relative">
+<img alt="Vintage wooden chair in a sunlit room" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-eSiCmrfaNiQ8ePKoiwT7_7tsKvVJeqhqd3OOhN3r6sg9DDxk_VlpHxDd28H0dnzXPqO1cCtaemZ3spSbxP3q0WeYUruot5Wxi1o3ufttslpOthtJwDM4HD7qbUDLtogbwU3g5WoImde33-rZKG-0dzLP4H8IQkvpAm714rzlFwEcCc_sqMcdaXEs8p5zd4Cba9wOLjoqOo8iAC2-XMY8NyNxfc0KkURwUaw4eDg3wQ5L-9k9N3GBl3VvdqX8BKufojfHpvrY59U"/>
+<div class="absolute top-3 left-3 bg-stone-100/90 dark:bg-stone-700/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-xs font-semibold text-stone-600 dark:text-stone-300 uppercase tracking-wide">
+                                    Pending
+                                </div>
+</div>
+<div class="p-3">
+<h3 class="text-stone-900 dark:text-white font-bold text-sm leading-snug mb-1">Mid-century Chair</h3>
+<div class="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 mb-3">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span>1.2 mi • Weekend</span>
+</div>
+<div class="flex items-center justify-between border-t border-stone-100 dark:border-stone-700 pt-2">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Avatar of David" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBrt0SwM99BIgPtHFFwnisdUgTfwMILNTRNRhgTiLm4EERgwCyTILjzGFz9xRIFm7Z2cN952YUOLeuYvNpWxNU8YONn2_K6Ey5LsiePIpRk5PgXz-VQh6ub5DVluY3NQl5KmILbZewsi-5u0tW3T2_orYLyXv7-j8rf7mGPDAuch5DXwv-6WOgA3z1QLf4Kt8_vNsOAgTqUW-O53zaTAkhyu_7C5ElbyKM5R0Cfs6XTke4x6BiEQrOeOan7sBTM__ydUJ6j0m9c63M");'></div>
+<span class="text-xs font-medium text-stone-700 dark:text-stone-300">David</span>
+</div>
+<span class="text-[10px] text-stone-400">5h ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="break-inside-avoid relative group cursor-pointer">
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-stone-800 soft-shadow transition-transform duration-300 hover:-translate-y-1">
+<div class="aspect-square w-full relative">
+<img alt="Monstera deliciosa leaf close up" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACC1Je1z5M2NawjwwlGuO2S0hxEl1XUPOWlPbfT7VAmrBSGvSnwEhpHqCpfrXyEQyMo07SZs6SOS_hyo1ZlKBdX3EKra-CaFPnQGbOK8UtmsvdI4yudT0ceJdiJWUw4SPro3V9PZwiIRLSx5SfXF9LuiegIZa0cl3w0l6LzSqluEnCcBZYsM72S0ddpwC-COlJvNelJPuvOdX8cDtGYX-Z0pERTDgTrZLelV5wh0jAbGVLohLB3A8uHQwXCSJtC_ICzWD6YB5SFXE"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-xs font-semibold text-primary uppercase tracking-wide">
+                                    Available
+                                </div>
+</div>
+<div class="p-3">
+<h3 class="text-stone-900 dark:text-white font-bold text-sm leading-snug mb-1">Monstera Cutting</h3>
+<div class="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 mb-3">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span>0.3 mi • Anytime</span>
+</div>
+<div class="flex items-center justify-between border-t border-stone-100 dark:border-stone-700 pt-2">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Avatar of Alex" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBshI5rkBNXEXTU__D9CRX2Dx5jQMU6laTKp7hn-wWn5t8ORPn79bBxY5RLBJhqShusnwrPEFiDRCyV_4M2k3d5MyzTtoDooVS6UFdf2HSpjLSy3_-JoNtqk_vqwFkILADmsOCFJpGND-g8lUwQOo__UAqTub_zFtnLrU7jyEKcCnLNTZE0pUl9o7srcDtHfsOp6QRtKgKPgr-OrykxRe_W3dtDb1Sj1NZPns72Fj8DEhXOIQd7xLT7qUVfAFysRrtBxO5We3si5qk");'></div>
+<span class="text-xs font-medium text-stone-700 dark:text-stone-300">Alex</span>
+</div>
+<span class="text-[10px] text-stone-400">1d ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="break-inside-avoid relative group cursor-pointer">
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-stone-800 soft-shadow transition-transform duration-300 hover:-translate-y-1">
+<div class="aspect-[4/3] w-full relative">
+<img alt="Garden trowel and gloves on soil" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUln_a9PpGg-zNaZzcE1Z_oyKsXWcaG804n-ae2vlMQXtuv8x_6Z6BrUTLdAIX0s8EgmyDJeU5UpC68JA3qblkIOEtwS4m0LVEAiWczuc4vCYrN1DiYrs5-bouccSt86BUSyGkTRWkXm5rseiHFI5aGppzVq8ThGWw4Qte7eKreP28vHtZdk-aOHmceX_gwOK8TQ5Thb3PnAWN6EcnvWHaiH6iMTV4s-6Y1kBKxrsEH4Z3Cu0aOkR6WcT5KrjfKFjkPg0k0tJV_Ko"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-xs font-semibold text-primary uppercase tracking-wide">
+                                    Available
+                                </div>
+</div>
+<div class="p-3">
+<h3 class="text-stone-900 dark:text-white font-bold text-sm leading-snug mb-1">Garden Tools</h3>
+<div class="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 mb-3">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span>0.8 mi • Flexible</span>
+</div>
+<div class="flex items-center justify-between border-t border-stone-100 dark:border-stone-700 pt-2">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Avatar of Sarah" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuApobd7SMDIOnrkZhAJW5bQuxdBvHEycBz8hIxt9ZnecLrDIwksWgI4gsoFX1uPNM0s9GpM63RU1feCxkQ0CRSTf0ViA0R9AH6OFl7Ek-PrW-I-GSD7xC_iSxSAOjmcKjG5huIyyzsn-bj2HJlXjeIzG45T_7mBE545bE8_6g7DiCKbgCPOXZP3OL7yk7t8m9-6uuW9l3NV5sOZ8IFaXV6i8n6VN__Bp5nvRE_f_PHOfpbk7PPnXvY_72GDXIosZ3dIMbp_MXlu44Y");'></div>
+<span class="text-xs font-medium text-stone-700 dark:text-stone-300">Sarah</span>
+</div>
+<span class="text-[10px] text-stone-400">2d ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="break-inside-avoid relative group cursor-pointer">
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-stone-800 soft-shadow transition-transform duration-300 hover:-translate-y-1">
+<div class="aspect-[3/4] w-full relative">
+<img alt="Stack of hardcover books" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDJOpiRE13lSw5UaFczkqBatpQUxPZXD_UbIudG0jt4bFLXEP_cNBJyVHlhKq9Y298le6SLZIy1xAPM8mgqbI_eMtqrZOXB7afgzJqArngGEOTozSC-6wZ-PHnwq27zNWDq_Q1_Ca8gjC61Afrn-GWCWnxZxcgpO2LrbzYL8l-jPN01IgUzIlvKhtXtoMbuMrKY8Zfoysd7qbooqdhz60bZu8j6YQ2EYRznu4soIVzRiPFpa-pKEVSNzAzd-nPlb5RVOAlSw07GQs"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-xs font-semibold text-primary uppercase tracking-wide">
+                                    Available
+                                </div>
+</div>
+<div class="p-3">
+<h3 class="text-stone-900 dark:text-white font-bold text-sm leading-snug mb-1">Sci-Fi Book Bundle</h3>
+<div class="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 mb-3">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span>2.0 mi • Front porch</span>
+</div>
+<div class="flex items-center justify-between border-t border-stone-100 dark:border-stone-700 pt-2">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-cover bg-center" data-alt="Avatar of Ken" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8haxgoY90Nyumtn6ryasASrqjMxUwDDTLrCb2SNZQhmaVT_PSh10hFlOXm9tmp1AJD-FXskJLiqAwvz06PoYJAKAJ6nNdeolnpM0UY_OLhTORlOHrpruP3anKlCOgm7ffYuXuM14iguN-tdipOy3n4jOqPSY4iCNqXjainLtfde-gCMxt4yD0utEYbZJNJwJdd9yjYdowBu8DPRD0oiW4BLwuJHOBIHZF0CRMVpDL_Fg6fJ4vWwDQ74y7MP5dNAHvGUnksBLI-u8");'></div>
+<span class="text-xs font-medium text-stone-700 dark:text-stone-300">Ken</span>
+</div>
+<span class="text-[10px] text-stone-400">3d ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 z-40 size-16 rounded-2xl bg-primary hover:bg-primary-dark text-white shadow-xl shadow-primary/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 group">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-stone-900/90 backdrop-blur-lg border-t border-stone-200 dark:border-stone-800 pb-6 pt-2 max-w-md mx-auto">
+<div class="flex justify-around items-center">
+<button class="flex flex-col items-center gap-1 p-2 text-primary">
+<span class="material-symbols-outlined filled">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 transition-colors">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-medium">Map</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 transition-colors">
+<span class="material-symbols-outlined">chat_bubble_outline</span>
+<span class="text-[10px] font-medium">Chat</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 transition-colors">
+<span class="material-symbols-outlined">person_outline</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</nav>
+</div>
+</div>
+</body></html>

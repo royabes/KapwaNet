@@ -1,0 +1,46 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "diversity_3 KapwaNet Community Platform" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]: diversity_3
+        - generic [ref=e8]:
+          - heading "KapwaNet" [level=1] [ref=e9]
+          - paragraph [ref=e10]: Community Platform
+    - main [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - heading "Join the community" [level=2] [ref=e14]
+          - paragraph [ref=e15]: Create an account to start helping and sharing
+          - generic [ref=e16]:
+            - generic [ref=e17]:
+              - generic [ref=e18]: Display name
+              - textbox "Display name" [ref=e19]:
+                - /placeholder: How should we call you?
+            - generic [ref=e20]:
+              - generic [ref=e21]: Email address
+              - textbox "Email address" [ref=e22]:
+                - /placeholder: you@example.com
+            - generic [ref=e23]:
+              - generic [ref=e24]: Password
+              - textbox "Password" [ref=e25]:
+                - /placeholder: At least 8 characters
+            - generic [ref=e26]:
+              - generic [ref=e27]: Confirm password
+              - textbox "Confirm password" [ref=e28]:
+                - /placeholder: Re-enter your password
+            - button "person_add Create account" [ref=e29] [cursor=pointer]:
+              - generic [ref=e30]: person_add
+              - text: Create account
+          - paragraph [ref=e32]:
+            - text: Already have an account?
+            - link "Sign in" [ref=e33] [cursor=pointer]:
+              - /url: /login
+        - generic [ref=e34]:
+          - generic [ref=e35]: format_quote
+          - paragraph [ref=e36]: “In kapwa, we recognize our shared humanity and commit to lifting each other up.”
+  - alert [ref=e37]
+```

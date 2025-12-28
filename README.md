@@ -1,47 +1,100 @@
 # KapwaNet
 
-**KapwaNet** is an open-source community platform rooted in the Filipino concept of *kapwa* — shared humanity.
+**Community platform for dignified mutual aid, rooted in the Filipino concept of *kapwa* (shared humanity).**
 
-It enables organizations to run dignified **bayanihan (mutual aid)**, **share essential goods**, and manage **community communications** through a branded, easy-to-deploy digital platform.
+KapwaNet enables organizations to run **bayanihan (mutual aid)**, share essential goods, and build community connections through a branded, easy-to-deploy digital platform.
+
+<p align="center">
+  <img src="desktop.png" alt="KapwaNet Desktop View" width="800"/>
+</p>
+
+<p align="center">
+  <img src="mobile.png" alt="KapwaNet Mobile View" width="300"/>
+</p>
 
 ## Key Principles
 
-- **Dignity-centered** — Not charity-only; mutual exchange
-- **Organization-first** — Deployable per org (multi-tenant)
-- **Peer-to-peer** — Platform infrastructure, not a marketplace
-- **Open-source** — AGPL-3.0, community-owned
+- **"There is no giver. There is no receiver. There is only the flow."**
+- **Dignity-centered** — Not charity; mutual exchange between equals
+- **Peer-to-peer** — Platform infrastructure, not a service provider
+- **Community-owned** — Open-source (AGPL-3.0), self-hostable
+- **Organization-first** — Each community runs their own branded instance
+
+---
+
+## Features
+
+### For Community Members
+- **Invitations** — Request help or offer assistance to neighbors
+- **Gifts** — Share items (food, clothing, household goods) with the community
+- **Messages** — Private coordination between matched members
+- **Activity Feed** — See what's happening in your community
+- **Notifications** — Stay updated on your posts and messages
+- **Search** — Find posts, members, and pages across the community
+
+### For Organizations
+- **Admin Dashboard** — Manage members, moderate content, view analytics
+- **Theming System** — Customize colors, fonts, and branding
+- **Page Builder** — Create custom pages with 20+ block types
+- **PWA Support** — Install as an app on mobile and desktop
+- **Multi-tenant** — One codebase, many communities
 
 ---
 
 ## Quick Start
 
-### Using the Autonomous Harness
+### Prerequisites
 
-The fastest way to build KapwaNet is with the autonomous coding harness:
+- **Node.js 18+** (for frontend)
+- **Python 3.10+** (for backend)
+- **PostgreSQL** (or Docker)
+- **Docker & Docker Compose** (recommended)
 
-```bash
-# 1. Set up harness
-cd harness
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# 2. Run Sprint 0 (Foundation)
-python run_harness.py --sprint 0
-```
-
-See [harness/README.md](harness/README.md) for full harness documentation.
-
-### Manual Development
+### Option 1: Docker (Recommended)
 
 ```bash
-# With Docker (recommended)
+# Clone the repository
+git clone https://github.com/royabes/KapwaNet.git
+cd KapwaNet
+
+# Start all services
 docker-compose up --build
 
-# Services:
+# Services will be available at:
 # - Frontend: http://localhost:3000
 # - Backend API: http://localhost:8000
 # - Admin: http://localhost:8000/admin/
+```
+
+### Option 2: Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/royabes/KapwaNet.git
+cd KapwaNet
+
+# Backend setup
+cd apps/api
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+
+# Frontend setup (new terminal)
+cd apps/web
+npm install
+npm run dev
+```
+
+### Option 3: Frontend Only (Quick Demo)
+
+```bash
+cd apps/web
+npm install
+npm run dev
+# Visit http://localhost:3000
 ```
 
 ---
@@ -51,13 +104,21 @@ docker-compose up --build
 ```
 kapwanet/
 ├── apps/
-│   ├── web/          # Next.js frontend
-│   └── api/          # Django + Wagtail backend
-├── infra/            # Docker, nginx configs
-├── harness/          # Autonomous coding harness
-├── docs/             # Documentation
-├── .claude/          # Feature lists for harness
-└── .beads/           # Task tracking (Beads)
+│   ├── web/              # Next.js 14 frontend
+│   │   ├── src/
+│   │   │   ├── app/      # App router pages
+│   │   │   ├── components/
+│   │   │   └── contexts/ # React contexts
+│   │   └── public/       # Static assets, PWA manifest
+│   └── api/              # Django backend
+│       ├── kapwanet/     # Django project settings
+│       ├── organizations/
+│       ├── users/
+│       ├── help/         # Invitations/help posts
+│       ├── items/        # Gift/item posts
+│       └── messaging/
+├── infra/                # Docker, nginx configs
+└── docs/                 # Additional documentation
 ```
 
 ---
@@ -66,94 +127,110 @@ kapwanet/
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 14+, TypeScript, Tailwind CSS |
-| Backend | Django 5.0+, Django REST Framework, Wagtail CMS |
+| Frontend | Next.js 14, TypeScript, Tailwind CSS |
+| Backend | Django 5.0, Django REST Framework |
 | Database | PostgreSQL |
 | Auth | JWT (djangorestframework-simplejwt) |
+| PWA | Service Worker, Web App Manifest |
 | Deployment | Docker Compose, Nginx |
 
 ---
 
-## Core Modules
+## Pages & Navigation
 
-### 1. CMS & Public Website
-Editable pages, news, media library with draft → review → publish workflow.
-
-### 2. Styling & Templates (Key Differentiator)
-- Theme tokens (colors, fonts, spacing)
-- Curated theme presets
-- 20 block types for page building
-- Template library for quick site launch
-
-### 3. Bayanihan Help
-- Post help requests or offers
-- Matching and messaging
-- Status flow: Open → Matched → Completed
-
-### 4. Item Sharing
-- Offer/request items (food, clothing, essentials)
-- Food safety fields (expiry, allergens)
-- Reservation and pickup coordination
-
-### 5. Moderation & Trust
-- Reporting system
-- Moderator dashboard
-- Audit logs
+| Page | Path | Description |
+|------|------|-------------|
+| Home | `/` | Community dashboard |
+| Explore | `/explore` | Browse all content |
+| Invitations | `/invitations` | Help requests and offers |
+| Gifts | `/gifts` | Items being shared |
+| Messages | `/messages` | Private conversations |
+| Profile | `/profile` | Your profile and activity |
+| Notifications | `/notifications` | Updates and alerts |
+| Activity | `/activity` | Community activity feed |
+| Search | `/search` | Global search |
+| Settings | `/settings` | Account preferences |
+| Help | `/help` | User guide |
+| Philosophy | `/philosophy` | Our principles |
+| Admin | `/admin` | Organization dashboard |
 
 ---
 
-## Development Sprints
+## For Organizations
 
-| Sprint | Name | Features |
-|--------|------|----------|
-| 0 | Foundation | Monorepo, Docker, Django/Next.js skeletons |
-| 1 | Styling & Templates | Theme engine, block renderer, template library |
-| 2 | Community Features | Help posts, item sharing, messaging, moderation |
+KapwaNet is designed to be deployed by **community organizations**:
 
-Feature lists: `.claude/sprint{N}_feature_list.json`
+- Churches and faith communities
+- Neighborhood associations
+- Mutual aid organizations
+- Community centers
+- Housing cooperatives
+- Cultural organizations
 
----
-
-## Documentation
-
-- [CLAUDE.md](CLAUDE.md) — Project instructions for Claude Code
-- [AGENTS.md](AGENTS.md) — AI agent workflow with Beads
-- [docs/plan/prd.md](docs/plan/prd.md) — Product Requirements Document
-- [docs/plan/architecture.md](docs/plan/architecture.md) — System Architecture
-- [docs/plan/schema.md](docs/plan/schema.md) — Database Schema
-- [docs/plan/block_renderer.md](docs/plan/block_renderer.md) — Block Specifications
+Each organization gets their own branded instance with:
+- Custom domain support
+- Theme customization (colors, fonts, logo)
+- Member management
+- Content moderation tools
+- Analytics dashboard
 
 ---
 
-## Task Tracking (Beads)
+## Environment Variables
 
-This project uses [Beads](https://github.com/steveyegge/beads) for AI-native issue tracking.
+Create a `.env` file in the project root:
 
 ```bash
-# Initialize Beads
-bd init
+# Django Backend
+SECRET_KEY=your-secret-key-here
+DEBUG=True
+DATABASE_URL=postgres://user:password@localhost:5432/kapwanet
 
-# See available tasks
-bd ready
-
-# Start working on a task
-bd update <task-id> --status in_progress
-
-# Complete and sync
-bd close <task-id> --reason done
-bd sync
+# Frontend
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ---
 
-## License
+## Contributing
 
-**AGPL-3.0** — Improvements remain open, hosted services share modifications.
+We welcome contributions! KapwaNet is open source under the AGPL-3.0 license.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
 ## Philosophy
 
-> Communities already have what they need — they just need the right infrastructure to connect.
+Read our full philosophy: [PHILOSOPHY.md](PHILOSOPHY.md)
 
-KapwaNet exists to make that connection dignified, safe, and sustainable.
+> *"Hindi ko kayang maging tao kung wala kayo."*
+> "I cannot be human without you."
+
+KapwaNet is built on the belief that communities already have what they need — they just need the right infrastructure to connect. We reject the giver/receiver divide of traditional charity. Everyone gives. Everyone receives. The gift flows in all directions.
+
+---
+
+## License
+
+**AGPL-3.0** — This means:
+- You can use, modify, and distribute this software
+- If you run a modified version as a service, you must share your changes
+- Improvements remain open for all communities
+
+See [LICENSE](LICENSE) for the full text.
+
+---
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/royabes/KapwaNet/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/royabes/KapwaNet/discussions)
+
+---
+
+*KapwaNet: Because communities already have what they need — they just need the right infrastructure to connect.*

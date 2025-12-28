@@ -1,13 +1,32 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/contexts'
+import { ThemeProvider, AuthProvider } from '@/contexts'
+import { PWAProvider, InstallPrompt, OfflineIndicator } from '@/components/pwa'
 
-const inter = Inter({ subsets: ['latin'] })
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-plus-jakarta',
+})
 
 export const metadata: Metadata = {
   title: 'KapwaNet - Community Platform',
   description: 'A community platform for dignified mutual aid, rooted in kapwa (shared humanity).',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'KapwaNet',
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#73c91d',
 }
 
 export default function RootLayout({
@@ -16,24 +35,33 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={plusJakarta.variable}>
+      <head>
+        {/* Material Symbols */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={`${plusJakarta.className} bg-background-light dark:bg-background-dark antialiased`}>
         <ThemeProvider>
-          <div className="min-h-screen flex flex-col">
-            <header className="bg-surface border-b border-gray-200">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <h1 className="text-2xl font-bold text-primary">KapwaNet</h1>
+          <AuthProvider>
+            <PWAProvider>
+              {/* Offline indicator */}
+              <OfflineIndicator />
+
+              {/* Texture overlay for wabi-sabi feel */}
+              <div className="texture-overlay" />
+
+              {/* Main app content */}
+              <div className="relative min-h-screen">
+                {children}
               </div>
-            </header>
-            <main className="flex-1">
-              {children}
-            </main>
-            <footer className="bg-surface border-t border-gray-200">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-muted text-sm">
-                KapwaNet - Community Platform for Dignified Mutual Aid
-              </div>
-            </footer>
-          </div>
+
+              {/* PWA install prompt */}
+              <InstallPrompt />
+            </PWAProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
