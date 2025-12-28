@@ -116,7 +116,7 @@
         "Create ContactBlock block component with org info and social links",
         "Ensure all blocks use CSS variables for theming"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "Hero renders with headline, CTAs, background image",
         "RichTextSection renders sanitized HTML",
