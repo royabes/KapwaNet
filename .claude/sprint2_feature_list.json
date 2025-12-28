@@ -92,7 +92,7 @@
         "Create message thread on match accepted",
         "Update HelpPost status on match"
       ],
-      "passes": false,
+      "passes": true,
       "acceptance_criteria": [
         "HelpMatch links helper to requester",
         "Interest can be expressed via API",

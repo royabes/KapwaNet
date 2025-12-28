@@ -8,7 +8,7 @@ Serializers for help models.
 from rest_framework import serializers
 
 from organizations.models import Membership, Organization
-from .models import HelpPost
+from .models import HelpPost, HelpMatch
 
 
 class HelpPostSerializer(serializers.ModelSerializer):
@@ -199,3 +199,128 @@ class HelpPostStatusUpdateSerializer(serializers.Serializer):
             )
 
         return value
+
+
+class HelpMatchSerializer(serializers.ModelSerializer):
+    """
+    Serializer for HelpMatch model.
+    """
+
+    helper_name = serializers.SerializerMethodField()
+    requester_name = serializers.SerializerMethodField()
+    help_post_title = serializers.CharField(source='help_post.title', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    can_accept = serializers.SerializerMethodField()
+    can_withdraw = serializers.SerializerMethodField()
+
+    class Meta:
+        model = HelpMatch
+        fields = [
+            'id',
+            'org',
+            'help_post',
+            'help_post_title',
+            'helper_user',
+            'helper_name',
+            'requester_name',
+            'status',
+            'status_display',
+            'message',
+            'thread',
+            'created_at',
+            'updated_at',
+            'accepted_at',
+            'closed_at',
+            'can_accept',
+            'can_withdraw',
+        ]
+        read_only_fields = [
+            'id',
+            'org',
+            'help_post',
+            'helper_user',
+            'thread',
+            'created_at',
+            'updated_at',
+            'accepted_at',
+            'closed_at',
+        ]
+
+    def get_helper_name(self, obj):
+        """Get the display name of the helper."""
+        if obj.helper_user:
+            return obj.helper_user.get_full_name() or obj.helper_user.email
+        return None
+
+    def get_requester_name(self, obj):
+        """Get the display name of the requester (post creator)."""
+        if obj.requester_user:
+            return obj.requester_user.get_full_name() or obj.requester_user.email
+        return None
+
+    def get_can_accept(self, obj):
+        """Check if the current user can accept this match."""
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            return False
+        # Only the post creator can accept matches
+        return obj.status == 'pending' and obj.requester_user == request.user
+
+    def get_can_withdraw(self, obj):
+        """Check if the current user can withdraw this match."""
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            return False
+        # Only the helper can withdraw
+        return obj.status in ('pending', 'accepted') and obj.helper_user == request.user
+
+
+class HelpMatchListSerializer(serializers.ModelSerializer):
+    """
+    Simplified serializer for listing help matches.
+    """
+
+    helper_name = serializers.SerializerMethodField()
+    help_post_title = serializers.CharField(source='help_post.title', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = HelpMatch
+        fields = [
+            'id',
+            'help_post',
+            'help_post_title',
+            'helper_name',
+            'status',
+            'status_display',
+            'created_at',
+        ]
+
+    def get_helper_name(self, obj):
+        """Get the display name of the helper."""
+        if obj.helper_user:
+            return obj.helper_user.get_full_name() or obj.helper_user.email
+        return None
+
+
+class ExpressInterestSerializer(serializers.Serializer):
+    """
+    Serializer for expressing interest in a help post.
+    """
+
+    message = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        max_length=1000,
+        help_text="Optional message to the post creator"
+    )
+
+
+class AcceptMatchSerializer(serializers.Serializer):
+    """
+    Serializer for accepting a match.
+    """
+
+    match_id = serializers.UUIDField(
+        help_text="The ID of the match to accept"
+    )

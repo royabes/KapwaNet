@@ -12,7 +12,7 @@ from rest_framework import status
 
 from users.models import User
 from organizations.models import Organization, Membership
-from .models import HelpPost
+from .models import HelpPost, HelpMatch
 
 
 class HelpPostModelTests(TestCase):
@@ -450,3 +450,337 @@ class HelpPostAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['title'], 'Post in org 2')
+
+
+class HelpMatchModelTests(TestCase):
+    """Tests for HelpMatch model."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.user1 = User.objects.create_user(
+            email='user1@example.com',
+            password='testpass123'
+        )
+        self.user2 = User.objects.create_user(
+            email='user2@example.com',
+            password='testpass123'
+        )
+        self.org = Organization.objects.create(
+            name='Test Organization',
+            slug='test-org'
+        )
+        Membership.objects.create(org=self.org, user=self.user1, role='member', status='active')
+        Membership.objects.create(org=self.org, user=self.user2, role='member', status='active')
+
+        self.help_post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test description',
+            created_by=self.user1
+        )
+
+    def test_express_interest(self):
+        """Test expressing interest creates a pending match."""
+        match = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2,
+            message='I can help!'
+        )
+        self.assertEqual(match.status, 'pending')
+        self.assertEqual(match.helper_user, self.user2)
+        self.assertEqual(match.requester_user, self.user1)
+        self.assertEqual(match.message, 'I can help!')
+
+    def test_cannot_express_interest_own_post(self):
+        """Test that you cannot express interest in your own post."""
+        with self.assertRaises(ValidationError):
+            HelpMatch.express_interest(
+                help_post=self.help_post,
+                helper_user=self.user1
+            )
+
+    def test_cannot_express_interest_twice(self):
+        """Test that you cannot express interest twice."""
+        HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2
+        )
+        with self.assertRaises(ValidationError):
+            HelpMatch.express_interest(
+                help_post=self.help_post,
+                helper_user=self.user2
+            )
+
+    def test_accept_match(self):
+        """Test accepting a match creates thread and updates status."""
+        match = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2
+        )
+        thread = match.accept()
+
+        self.assertEqual(match.status, 'accepted')
+        self.assertIsNotNone(match.thread)
+        self.assertIsNotNone(match.accepted_at)
+        self.assertEqual(self.help_post.status, 'matched')
+
+        # Check thread participants
+        self.assertTrue(thread.is_participant(self.user1))
+        self.assertTrue(thread.is_participant(self.user2))
+
+    def test_accept_declines_other_matches(self):
+        """Test that accepting a match declines other pending matches."""
+        user3 = User.objects.create_user(
+            email='user3@example.com',
+            password='testpass123'
+        )
+        Membership.objects.create(org=self.org, user=user3, role='member', status='active')
+
+        match1 = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2
+        )
+        match2 = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=user3
+        )
+
+        match1.accept()
+
+        match2.refresh_from_db()
+        self.assertEqual(match1.status, 'accepted')
+        self.assertEqual(match2.status, 'declined')
+
+    def test_decline_match(self):
+        """Test declining a match."""
+        match = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2
+        )
+        match.decline()
+        self.assertEqual(match.status, 'declined')
+
+    def test_withdraw_pending_match(self):
+        """Test withdrawing a pending match."""
+        match = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2
+        )
+        match.withdraw()
+        self.assertEqual(match.status, 'withdrawn')
+
+    def test_withdraw_accepted_reopens_post(self):
+        """Test that withdrawing an accepted match reopens the post."""
+        match = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2
+        )
+        match.accept()
+        self.assertEqual(self.help_post.status, 'matched')
+
+        match.withdraw()
+        self.help_post.refresh_from_db()
+        self.assertEqual(match.status, 'withdrawn')
+        self.assertEqual(self.help_post.status, 'open')
+
+    def test_close_match_completes_post(self):
+        """Test closing a match marks the post as completed."""
+        match = HelpMatch.express_interest(
+            help_post=self.help_post,
+            helper_user=self.user2
+        )
+        match.accept()
+        match.close(completed=True)
+
+        self.help_post.refresh_from_db()
+        self.assertEqual(match.status, 'closed')
+        self.assertEqual(self.help_post.status, 'completed')
+
+
+class HelpMatchAPITests(APITestCase):
+    """Tests for help match API endpoints."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.user1 = User.objects.create_user(
+            email='user1@example.com',
+            password='testpass123'
+        )
+        self.user2 = User.objects.create_user(
+            email='user2@example.com',
+            password='testpass123'
+        )
+        self.org = Organization.objects.create(
+            name='Test Organization',
+            slug='test-org'
+        )
+        Membership.objects.create(org=self.org, user=self.user1, role='member', status='active')
+        Membership.objects.create(org=self.org, user=self.user2, role='member', status='active')
+
+    def get_token(self, user):
+        """Get JWT token for a user."""
+        response = self.client.post('/api/token/', {
+            'email': user.email,
+            'password': 'testpass123'
+        })
+        return response.data['access']
+
+    def test_express_interest(self):
+        """Test expressing interest via API."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user2)}')
+        response = self.client.post(
+            f'/api/help-posts/{post.id}/express-interest/',
+            {'message': 'I can help!'}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['status'], 'pending')
+
+    def test_view_matches_for_post(self):
+        """Test viewing matches for a help post."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+        HelpMatch.express_interest(help_post=post, helper_user=self.user2)
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user1)}')
+        response = self.client.get(f'/api/help-posts/{post.id}/matches/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_non_author_cannot_view_matches(self):
+        """Test that non-authors cannot view all matches."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user2)}')
+        response = self.client.get(f'/api/help-posts/{post.id}/matches/')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_accept_match(self):
+        """Test accepting a match via API."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+        match = HelpMatch.express_interest(help_post=post, helper_user=self.user2)
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user1)}')
+        response = self.client.post(
+            f'/api/help-posts/{post.id}/accept-match/',
+            {'match_id': str(match.id)}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['status'], 'accepted')
+        self.assertIsNotNone(response.data['thread'])
+
+    def test_list_my_matches(self):
+        """Test listing user's matches."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+        HelpMatch.express_interest(help_post=post, helper_user=self.user2)
+
+        # As helper
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user2)}')
+        response = self.client.get('/api/help-matches/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+        # As requester
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user1)}')
+        response = self.client.get('/api/help-matches/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_withdraw_match(self):
+        """Test withdrawing from a match."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+        match = HelpMatch.express_interest(help_post=post, helper_user=self.user2)
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user2)}')
+        response = self.client.post(f'/api/help-matches/{match.id}/withdraw/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['status'], 'withdrawn')
+
+    def test_decline_match(self):
+        """Test declining a match."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+        match = HelpMatch.express_interest(help_post=post, helper_user=self.user2)
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user1)}')
+        response = self.client.post(f'/api/help-matches/{match.id}/decline/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['status'], 'declined')
+
+    def test_close_match(self):
+        """Test closing a match."""
+        post = HelpPost.objects.create(
+            org=self.org,
+            type='request',
+            category='transportation',
+            title='Need a ride',
+            description='Test',
+            created_by=self.user1
+        )
+        match = HelpMatch.express_interest(help_post=post, helper_user=self.user2)
+        match.accept()
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.get_token(self.user1)}')
+        response = self.client.post(
+            f'/api/help-matches/{match.id}/close/',
+            {'completed': True}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['status'], 'closed')

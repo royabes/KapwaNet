@@ -7,7 +7,7 @@ Admin configuration for help models.
 
 from django.contrib import admin
 
-from .models import HelpPost
+from .models import HelpPost, HelpMatch
 
 
 @admin.register(HelpPost)
@@ -35,6 +35,33 @@ class HelpPostAdmin(admin.ModelAdmin):
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(HelpMatch)
+class HelpMatchAdmin(admin.ModelAdmin):
+    """Admin configuration for HelpMatch model."""
+
+    list_display = [
+        'id', 'help_post', 'helper_user', 'status',
+        'org', 'created_at', 'accepted_at'
+    ]
+    list_filter = ['status', 'org']
+    search_fields = ['help_post__title', 'helper_user__email']
+    readonly_fields = ['id', 'created_at', 'updated_at', 'accepted_at', 'closed_at']
+    ordering = ['-created_at']
+
+    fieldsets = (
+        (None, {
+            'fields': ('id', 'org', 'help_post', 'helper_user')
+        }),
+        ('Status', {
+            'fields': ('status', 'message', 'thread')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at', 'accepted_at', 'closed_at'),
             'classes': ('collapse',)
         }),
     )
